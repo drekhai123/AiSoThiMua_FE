@@ -24,3 +24,35 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Logo Scroll Animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.logo-scroll-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.logo-scroll-track {
+  display: flex;
+  gap: 3rem;
+  animation: scroll 80s linear infinite;
+  width: fit-content;
+}
+
+.logo-scroll-track:hover {
+  animation-play-state: paused;
+}
+
+.logo-item {
+  flex-shrink: 0;
+  width: 160px;
+  cursor: pointer;
+}
