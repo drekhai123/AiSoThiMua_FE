@@ -4,24 +4,24 @@ import { Card, CardContent } from "@/components/ui/card";
 const features = [
   {
     icon: Package,
-    title: "Sản phẩm chất lượng cao",
-    description: "Nhiều sản phẩm đa dạng",
+    title: "Sản phẩm chính hãng",
+    description: "100% tài khoản AI & Tech chính hãng, uy tín cao",
     gradient: "from-blue-500 to-cyan-500",
     bgColor: "bg-gradient-to-br from-slate-800 to-slate-900",
     iconBg: "bg-gradient-to-br from-blue-500 to-cyan-500",
   },
   {
     icon: Truck,
-    title: "Cung cấp sản phẩm nhanh chóng",
-    description: "Cung cấp sản phẩm kịp thời cho vấn đề của bạn",
+    title: "Giao hàng tức thì",
+    description: "Nhận tài khoản ngay sau khi thanh toán thành công",
     gradient: "from-purple-500 to-pink-500",
     bgColor: "bg-gradient-to-br from-slate-800 to-slate-900",
     iconBg: "bg-gradient-to-br from-purple-500 to-pink-500",
   },
   {
     icon: HeadphonesIcon,
-    title: "Hỗ trợ khách hàng",
-    description: "Luôn sẵn sàng hỗ trợ bạn",
+    title: "Hỗ trợ 24/7",
+    description: "Đội ngũ hỗ trợ chuyên nghiệp, sẵn sàng giúp đỡ mọi lúc",
     gradient: "from-green-500 to-emerald-500",
     bgColor: "bg-gradient-to-br from-slate-800 to-slate-900",
     iconBg: "bg-gradient-to-br from-green-500 to-emerald-500",
@@ -34,8 +34,8 @@ const Features = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <Card 
-              key={index} 
+            <Card
+              key={index}
               className={`${feature.bgColor} border-none hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 animate-in fade-in slide-in-from-bottom-4`}
               style={{ animationDelay: `${index * 100}ms` }}
             >

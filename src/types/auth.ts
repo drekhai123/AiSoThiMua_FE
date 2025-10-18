@@ -39,6 +39,7 @@ export interface User {
   email: string;
   phone?: string;
   avatar?: string;
+  balance: number; // Số dư Cá
   createdAt: Date;
   updatedAt: Date;
 }

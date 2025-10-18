@@ -10,20 +10,20 @@ const PromoBanner = () => {
   const banners = [
     {
       id: 1,
-      title: "🎉 Tặng miễn phí 5 tài khoản chatgpt",
-      description: "Chỉ trong tuần này - Đừng bỏ lỡ!",
+      title: "🎉 Nạp lần đầu tặng 50 cá",
+      description: "Cho 50 khách hàng đầu tiên - Đừng bỏ lỡ! (từ 10/10 đến 31/10)",
       bgGradient: "from-purple-600 to-blue-600"
     },
     {
       id: 2,
-      title: "✨ ChatGPT Plus - Miễn phí 1 tháng",
-      description: "Khi mua gói 6 tháng trở lên",
+      title: "✨ Tặng Chatgpt Plus 1 tháng",
+      description: "Khi đơn hàng từ 100 cá trở lên",
       bgGradient: "from-blue-600 to-cyan-600"
     },
     {
       id: 3,
-      title: "🚀 Midjourney Pro - Ưu đãi đặc biệt",
-      description: "Giảm 25% cho khách hàng mới",
+      title: "🚀 Đang cập nhập thêm các sự kiện",
+      description: "Đừng bỏ lỡ!",
       bgGradient: "from-indigo-600 to-purple-600"
     }
   ];

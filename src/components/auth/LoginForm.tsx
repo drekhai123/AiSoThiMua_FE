@@ -2,28 +2,34 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Lock, Mail, ArrowLeft } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginForm() {
+  const router = useRouter();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // TODO: Implement login logic here
-    console.log("Login data:", formData);
-    
-    // Simulate API call
-    setTimeout(() => {
+    setError("");
+
+    try {
+      await login(formData.email, formData.password);
+      // Redirect to home page after successful login
+      router.push("/");
+    } catch (err) {
+      setError("Đăng nhập thất bại. Vui lòng thử lại.");
       setIsLoading(false);
-      // Add your login logic here
-    }, 1500);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +51,7 @@ export default function LoginForm() {
         </div>
         <span className="font-medium">Về trang chủ</span>
       </Link>
-      
+
       {/* Card Container */}
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-xl p-8 space-y-6">
         {/* Header */}
@@ -60,6 +66,13 @@ export default function LoginForm() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5" suppressHydrationWarning>
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
           {/* Email Field */}
           <div className="space-y-2">
             <label htmlFor="email" className="block text-sm font-medium text-white">

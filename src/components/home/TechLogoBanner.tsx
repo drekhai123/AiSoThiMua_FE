@@ -8,7 +8,9 @@ const TechLogoBanner = () => {
     { name: "GitHub Copilot", logo: "/techlogos/github.svg"},
     { name: "Google Gemini", logo: "/techlogos/gemini.svg"},
     { name: "Capcut", logo: "/techlogos/capcut.svg"},
-    { name: "Grok AI", logo: "/techlogos/grok.svg"}
+    { name: "Grok AI", logo: "/techlogos/grok.svg"},
+    { name: "Youtube", logo: "/techlogos/youtube.svg"},
+    { name: "Adobe", logo: "/techlogos/adobe.svg"}
 
 
     

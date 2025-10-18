@@ -38,7 +38,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">
-                  Liên hệ
+                  Liên hệ thiết kế website
                 </Link>
               </li>
             </ul>
