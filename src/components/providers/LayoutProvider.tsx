@@ -5,6 +5,8 @@ import Navbar from "@/components/layouts/Navbar";
 import Footer from "@/components/layouts/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
+import LoadingProvider from "@/components/providers/LoadingProvider";
+import ChatWidget from "@/components/ui/ChatWidget";
 
 export default function LayoutProvider({
   children,
@@ -19,12 +21,15 @@ export default function LayoutProvider({
     || pathname === "/forgot-password";
 
   return (
-    <AuthProvider>
-      <CartProvider>
-        {!hideLayout && <Navbar />}
-        {children}
-        {!hideLayout && <Footer />}
-      </CartProvider>
-    </AuthProvider>
+    <LoadingProvider>
+      <AuthProvider>
+        <CartProvider>
+          {!hideLayout && <Navbar />}
+          {children}
+          {!hideLayout && <Footer />}
+          {!hideLayout && <ChatWidget />}
+        </CartProvider>
+      </AuthProvider>
+    </LoadingProvider>
   );
 }

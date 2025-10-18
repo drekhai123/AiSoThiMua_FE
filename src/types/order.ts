@@ -8,6 +8,16 @@ export interface OrderItem {
   price: number;
   duration: string;
   quantity: number;
+  rating?: number;
+  review?: string;
+  reviewedAt?: Date;
+  accountCredentials?: {
+    email?: string;
+    password?: string;
+    twoFactorCode?: string;
+    recoveryEmail?: string;
+    notes?: string;
+  };
 }
 
 export interface Order {
@@ -18,7 +28,6 @@ export interface Order {
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
-  paymentMethod: string;
   deliveryEmail?: string;
 }
 

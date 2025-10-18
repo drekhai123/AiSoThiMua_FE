@@ -16,6 +16,8 @@ const PRODUCTS_DATA: Product[] = [
     id: "1",
     name: "ChatGPT Plus",
     price: 299, // Cá
+    originalPrice: 350,
+    discount: 15,
     duration: "/tháng",
     description: "Truy cập không giới hạn GPT-4, tốc độ nhanh hơn, ưu tiên phản hồi",
     logo: "/techlogos/openai.svg",
@@ -40,6 +42,8 @@ const PRODUCTS_DATA: Product[] = [
     id: "3",
     name: "Midjourney Standard",
     price: 599, // Cá
+    originalPrice: 750,
+    discount: 20,
     duration: "/tháng",
     description: "Tạo hình ảnh AI chất lượng cao, 15 giờ Fast GPU/tháng",
     logo: "/techlogos/midjourney.svg",
@@ -73,6 +77,8 @@ const PRODUCTS_DATA: Product[] = [
     id: "6",
     name: "Canva Pro",
     price: 249, // Cá
+    originalPrice: 320,
+    discount: 22,
     duration: "/tháng",
     description: "Thiết kế đồ họa chuyên nghiệp với AI, templates không giới hạn",
     logo: "/techlogos/canva.svg",
@@ -101,7 +107,7 @@ const PRODUCTS_DATA: Product[] = [
     id: "8",
     name: "YouTube Premium",
     price: 179, // Cá
-    originalPrice: 229, // Giá gốc
+    originalPrice: 230, // Giá gốc
     discount: 22, // Giảm 22%
     duration: "/tháng",
     description: "Xem video không quảng cáo, nghe nhạc background, tải offline",

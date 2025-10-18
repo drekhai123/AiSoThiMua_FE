@@ -97,3 +97,119 @@ body {
 .animate-shake {
   animation: shake 0.5s ease-in-out;
 }
+
+/* Animation Delays */
+.delay-700 {
+  animation-delay: 700ms;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Custom scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #6366f1 #1e293b;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #0f172a;
+  border-radius: 3px;
+  margin: 4px 0;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6366f1, #8b5cf6);
+  border-radius: 3px;
+  border: 1px solid #1e293b;
+  transition: all 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7c3aed, #a855f7);
+  border-color: #334155;
+  transform: scaleX(1.2);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #5b21b6, #9333ea);
+}
+
+.scrollbar-thin::-webkit-scrollbar-corner {
+  background: #0f172a;
+}
+
+/* Scrollbar for dark theme */
+.dark .scrollbar-thin {
+  scrollbar-color: #6366f1 #0f172a;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6366f1, #8b5cf6);
+  border-color: #0f172a;
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7c3aed, #a855f7);
+  border-color: #1e293b;
+}
+
+/* Smooth scrolling */
+.scrollbar-thin {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar glow effect */
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  box-shadow: 0 0 6px rgba(99, 102, 241, 0.3);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+}
+
+/* Fade effect for scroll content */
+.scrollbar-thin::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scrollbar-thin::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.8), transparent);
+  pointer-events: none;
+  z-index: 1;
+}

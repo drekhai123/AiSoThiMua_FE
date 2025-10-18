@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Order, OrderStatus } from "@/types/order";
 import OrderCard from "@/components/orders/OrderCard";
+import OrderDetailModal from "@/components/orders/OrderDetailModal";
 import { Package, Search } from "lucide-react";
 
 // Mock orders data
@@ -18,16 +19,25 @@ const MOCK_ORDERS: Order[] = [
         productId: "1",
         productName: "ChatGPT Plus",
         productLogo: "/techlogos/openai.svg",
-        price: 299000,
-        duration: "/tháng",
+        price: 299,
+        duration: "1 tháng",
         quantity: 1,
+        accountCredentials: {
+          email: "chatgpt.user@example.com",
+          password: "SecurePass123!",
+          twoFactorCode: "JBSWY3DPEHPK3PXP",
+          recoveryEmail: "backup@example.com",
+          notes: "Không được đổi email tài khoản. Có thể đổi mật khẩu sau khi nhận.",
+        },
+        rating: 5,
+        review: "ChatGPT Plus rất tuyệt vời! Hỗ trợ công việc của tôi hiệu quả hơn rất nhiều. Tốc độ phản hồi nhanh và chính xác.",
+        reviewedAt: new Date("2024-01-16"),
       },
     ],
-    totalAmount: 299000,
+    totalAmount: 299,
     status: "completed",
     createdAt: new Date("2024-01-15"),
     updatedAt: new Date("2024-01-15"),
-    paymentMethod: "Chuyển khoản ngân hàng",
     deliveryEmail: "user@example.com",
   },
   {
@@ -39,25 +49,30 @@ const MOCK_ORDERS: Order[] = [
         productId: "6",
         productName: "Canva Pro",
         productLogo: "/techlogos/canva.svg",
-        price: 249000,
-        duration: "/tháng",
+        price: 249,
+        duration: "1 tháng",
         quantity: 1,
+        rating: 4,
+        review: "Canva Pro rất hữu ích cho thiết kế. Templates đẹp và dễ sử dụng.",
+        reviewedAt: new Date("2024-01-19"),
       },
       {
         id: "3",
         productId: "8",
         productName: "YouTube Premium",
         productLogo: "/techlogos/youtube.svg",
-        price: 179000,
+        price: 179,
         duration: "/tháng",
         quantity: 1,
+        rating: 5,
+        review: "YouTube Premium tuyệt vời! Không quảng cáo, có thể tải offline và nghe nhạc background.",
+        reviewedAt: new Date("2024-01-19"),
       },
     ],
-    totalAmount: 428000,
+    totalAmount: 428,
     status: "processing",
     createdAt: new Date("2024-01-18"),
     updatedAt: new Date("2024-01-18"),
-    paymentMethod: "Chuyển khoản ngân hàng",
     deliveryEmail: "user@example.com",
   },
   {
@@ -69,16 +84,15 @@ const MOCK_ORDERS: Order[] = [
         productId: "3",
         productName: "Midjourney Standard",
         productLogo: "/techlogos/midjourney.svg",
-        price: 599000,
-        duration: "/tháng",
+        price: 599,
+        duration: "1 tháng",
         quantity: 1,
       },
     ],
-    totalAmount: 599000,
+    totalAmount: 599,
     status: "pending",
     createdAt: new Date("2024-01-20"),
     updatedAt: new Date("2024-01-20"),
-    paymentMethod: "Chuyển khoản ngân hàng",
   },
   {
     id: "4",
@@ -89,16 +103,62 @@ const MOCK_ORDERS: Order[] = [
         productId: "4",
         productName: "GitHub Copilot",
         productLogo: "/techlogos/github.svg",
-        price: 199000,
+        price: 199,
         duration: "/tháng",
         quantity: 1,
       },
     ],
-    totalAmount: 199000,
+    totalAmount: 199,
     status: "cancelled",
     createdAt: new Date("2024-01-10"),
     updatedAt: new Date("2024-01-11"),
-    paymentMethod: "Chuyển khoản ngân hàng",
+  },
+  {
+    id: "5",
+    orderNumber: "ORD-2024-005",
+    items: [
+      {
+        id: "6",
+        productId: "5",
+        productName: "Claude Pro",
+        productLogo: "/techlogos/claude.svg",
+        price: 399,
+        duration: "/tháng",
+        quantity: 1,
+      },
+      {
+        id: "7",
+        productId: "7",
+        productName: "Google Gemini Advanced",
+        productLogo: "/techlogos/gemini.svg",
+        price: 449,
+        duration: "/tháng",
+        quantity: 1,
+      },
+      {
+        id: "8",
+        productId: "11",
+        productName: "Warp Pro",
+        productLogo: "/techlogos/warp.svg",
+        price: 349,
+        duration: "/tháng",
+        quantity: 1,
+      },
+      {
+        id: "9",
+        productId: "12",
+        productName: "Notion AI",
+        productLogo: "/techlogos/notion.svg",
+        price: 199,
+        duration: "/tháng",
+        quantity: 1,
+      },
+    ],
+    totalAmount: 1396,
+    status: "completed",
+    createdAt: new Date("2024-01-25"),
+    updatedAt: new Date("2024-01-25"),
+    deliveryEmail: "user@example.com",
   },
 ];
 
@@ -116,6 +176,18 @@ export default function OrdersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [orders] = useState<Order[]>(MOCK_ORDERS);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleViewDetail = (order: Order) => {
+    setSelectedOrder(order);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedOrder(null), 300);
+  };
 
   // Filter orders
   const filteredOrders = useMemo(() => {
@@ -158,18 +230,18 @@ export default function OrdersPage() {
   }
 
   return (
-    <main className="min-h-screen py-20 bg-gradient-to-b from-slate-950 to-slate-900">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <main className="min-h-screen py-16 bg-gradient-to-b from-slate-950 to-slate-900">
+      <div className="container mx-auto px-4 max-w-5xl">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Đơn hàng của tôi</h1>
-          <p className="text-gray-400">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-white mb-2">Đơn hàng của tôi</h1>
+          <p className="text-gray-400 text-sm">
             Quản lý và theo dõi tất cả đơn hàng của bạn
           </p>
         </div>
 
         {/* Search & Filter */}
-        <div className="mb-8 space-y-4">
+        <div className="mb-6 space-y-3">
           {/* Search Bar */}
           <div className="relative">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -178,7 +250,7 @@ export default function OrdersPage() {
               placeholder="Tìm kiếm đơn hàng theo mã hoặc tên sản phẩm..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              className="w-full pl-12 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm"
             />
           </div>
 
@@ -188,14 +260,14 @@ export default function OrdersPage() {
               <button
                 key={filter.value}
                 onClick={() => setSelectedStatus(filter.value)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all border ${selectedStatus === filter.value
-                    ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg shadow-purple-500/30"
-                    : "bg-slate-800 text-gray-300 border-slate-700 hover:border-purple-500 hover:bg-slate-700"
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selectedStatus === filter.value
+                  ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg shadow-purple-500/30"
+                  : "bg-slate-800 text-gray-300 border-slate-700 hover:border-purple-500 hover:bg-slate-700"
                   }`}
               >
                 {filter.label}
                 {orderCounts[filter.value as keyof typeof orderCounts] > 0 && (
-                  <span className="ml-2 px-2 py-0.5 rounded-full bg-white/10 text-xs">
+                  <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-white/10 text-xs">
                     {orderCounts[filter.value as keyof typeof orderCounts]}
                   </span>
                 )}
@@ -206,9 +278,9 @@ export default function OrdersPage() {
 
         {/* Orders List */}
         {filteredOrders.length > 0 ? (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredOrders.map((order) => (
-              <OrderCard key={order.id} order={order} />
+              <OrderCard key={order.id} order={order} onViewDetail={handleViewDetail} />
             ))}
           </div>
         ) : (
@@ -233,6 +305,13 @@ export default function OrdersPage() {
           </div>
         )}
       </div>
+
+      {/* Order Detail Modal */}
+      <OrderDetailModal
+        order={selectedOrder}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </main>
   );
 }
