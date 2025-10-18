@@ -1,5 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Building2,
+  FileText,
+  Shield,
+  HelpCircle,
+  RotateCcw,
+  Home,
+  ShoppingBag,
+  Info,
+  Globe
+} from "lucide-react";
 
 const Footer = () => {
   return (
@@ -19,25 +33,32 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Liên kết</h3>
+            <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Globe className="w-5 h-5" />
+              Liên kết
+            </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-muted-foreground hover:text-white transition-colors">
+                <Link href="/" className="text-muted-foreground hover:text-white transition-all duration-300 flex items-center gap-2 hover:translate-x-1 hover:scale-105 group">
+                  <Home className="w-4 h-4 group-hover:text-blue-400 transition-colors" />
                   Trang chủ
                 </Link>
               </li>
               <li>
-                <Link href="/products" className="text-muted-foreground hover:text-white transition-colors">
+                <Link href="/products" className="text-muted-foreground hover:text-white transition-all duration-300 flex items-center gap-2 hover:translate-x-1 hover:scale-105 group">
+                  <ShoppingBag className="w-4 h-4 group-hover:text-blue-400 transition-colors" />
                   Sản phẩm
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/about" className="text-muted-foreground hover:text-primary transition-all duration-300 flex items-center gap-2 hover:translate-x-1 hover:scale-105 group">
+                  <Info className="w-4 h-4 group-hover:text-purple-400 transition-colors" />
                   Giới thiệu
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/contact" className="text-muted-foreground hover:text-primary transition-all duration-300 flex items-center gap-2 hover:translate-x-1 hover:scale-105 group">
+                  <Globe className="w-4 h-4 group-hover:text-purple-400 transition-colors" />
                   Liên hệ thiết kế website
                 </Link>
               </li>
@@ -46,25 +67,32 @@ const Footer = () => {
 
           {/* Support */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Hỗ trợ</h3>
+            <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+              <HelpCircle className="w-5 h-5" />
+              Hỗ trợ
+            </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
                   Hướng dẫn mua hàng
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                  <RotateCcw className="w-4 h-4" />
                   Chính sách đổi trả
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
                   Điều khoản dịch vụ
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
                   Bảo mật thông tin
                 </a>
               </li>
@@ -73,16 +101,26 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Liên hệ</h3>
+            <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Building2 className="w-5 h-5" />
+              Thông tin công ty
+            </h3>
             <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-muted-foreground">
+              <li className="flex items-center gap-2 text-muted-foreground hover:text-white transition-all duration-300 hover:translate-x-1 group cursor-pointer">
+                <Mail className="w-4 h-4 group-hover:text-blue-400 transition-colors" />
                 <span>khai.lumberjack@gmail.com</span>
               </li>
-              <li className="flex items-center gap-2 text-muted-foreground">
+              <li className="flex items-center gap-2 text-muted-foreground hover:text-white transition-all duration-300 hover:translate-x-1 group cursor-pointer">
+                <Phone className="w-4 h-4 group-hover:text-green-400 transition-colors" />
                 <span>0901267368</span>
               </li>
-              <li className="flex items-center gap-2 text-muted-foreground">
+              <li className="flex items-center gap-2 text-muted-foreground hover:text-white transition-all duration-300 hover:translate-x-1 group cursor-pointer">
+                <MapPin className="w-4 h-4 group-hover:text-red-400 transition-colors" />
                 <span>Hồ Chí Minh, Việt Nam</span>
+              </li>
+              <li className="flex items-center gap-2 text-muted-foreground hover:text-white transition-all duration-300 hover:translate-x-1 group cursor-pointer">
+                <Building2 className="w-4 h-4 group-hover:text-purple-400 transition-colors" />
+                <span>MST: 8802849554 </span>
               </li>
             </ul>
           </div>

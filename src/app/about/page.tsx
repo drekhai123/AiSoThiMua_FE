@@ -303,22 +303,73 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-8 text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 mb-6">
-                <Users className="w-10 h-10 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {/* Team Member Card 1 */}
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg overflow-hidden hover:border-purple-500 transition-all group">
+              <div className="aspect-square relative overflow-hidden">
+                <Image
+                  src="/team/member.png"
+                  alt="Thành viên 1"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">
-                Chúng tôi luôn sẵn sàng hỗ trợ bạn
-              </h3>
-              <p className="text-gray-300 mb-6 leading-relaxed">
-                Đội ngũ của chúng tôi gồm những chuyên gia về công nghệ, AI, thiết kế web và dịch vụ khách hàng.
-                Từ developers, designers đến customer support, chúng tôi làm việc không ngừng để đảm bảo
-                bạn có trải nghiệm tốt nhất khi sử dụng dịch vụ.
-              </p>
-              <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all font-semibold">
-                Liên hệ với chúng tôi
-              </button>
+              <div className="p-5 text-center">
+                <h3 className="text-lg font-bold text-white mb-1">Đoàn Tuấn Khải</h3>
+                <p className="text-purple-400 text-sm mb-2">CEO & Founder</p>
+                <p className="text-gray-400 text-sm">Chuyên gia về AI và công nghệ</p>
+              </div>
+            </div>
+
+            {/* Team Member Card 2 */}
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg overflow-hidden hover:border-purple-500 transition-all group">
+              <div className="aspect-square relative overflow-hidden">
+                {/* <Image
+                  src=""
+                  alt="Thành viên 2"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                /> */}
+              </div>
+              <div className="p-5 text-center">
+                <h3 className="text-lg font-bold text-white mb-1">Đang còn trống</h3>
+                <p className="text-blue-400 text-sm mb-2">Lead Developer</p>
+                <p className="text-gray-400 text-sm">Chuyên viên phát triển</p>
+              </div>
+            </div>
+
+            {/* Team Member Card 3 */}
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg overflow-hidden hover:border-purple-500 transition-all group">
+              <div className="aspect-square relative overflow-hidden">
+                {/* <Image
+                  src="/team/member.png"
+                  alt="Thành viên 3"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                /> */}
+              </div>
+              <div className="p-5 text-center">
+                <h3 className="text-lg font-bold text-white mb-1">Đang còn trống</h3>
+                <p className="text-green-400 text-sm mb-2">UI/UX Designer</p>
+                <p className="text-gray-400 text-sm">Chuyên viên thiết kế</p>
+              </div>
+            </div>
+
+            {/* Team Member Card 4 */}
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg overflow-hidden hover:border-purple-500 transition-all group">
+              <div className="aspect-square relative overflow-hidden">
+                {/* <Image
+                  src="/team/member.png"
+                  alt="Thành viên 4"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-300"
+                /> */}
+              </div>
+              <div className="p-5 text-center">
+                <h3 className="text-lg font-bold text-white mb-1">Đang còn trống</h3>
+                <p className="text-orange-400 text-sm mb-2">Customer Support</p>
+                <p className="text-gray-400 text-sm">Hỗ trợ khách hàng</p>
+              </div>
             </div>
           </div>
         </div>

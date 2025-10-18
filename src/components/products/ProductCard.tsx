@@ -20,15 +20,23 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }: ProductCardProps) => {
     >
       <CardHeader className="flex-shrink-0">
         <div className="flex items-start justify-between mb-3">
-          <div className="p-3 rounded-lg group-hover:scale-110 transition-transform">
-            <div className="relative w-12 h-12">
-              <Image
-                src={product.logo}
-                alt={product.name}
-                fill
-                className="object-contain"
-              />
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-lg group-hover:scale-110 transition-transform">
+              <div className="relative w-12 h-12">
+                <Image
+                  src={product.logo}
+                  alt={product.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
+            {/* Discount Badge */}
+            {product.discount && product.originalPrice && (
+              <div className="px-2 py-1 bg-red-500 rounded text-white text-xs font-bold">
+                -{product.discount}%
+              </div>
+            )}
           </div>
           <div className="h-6">
             {product.badge && (
@@ -50,7 +58,7 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }: ProductCardProps) => {
           {product.sold && (
             <div className="flex items-center gap-1 text-gray-400 text-xs">
               <TrendingUp className="w-3 h-3" />
-              <span>{product.sold.toLocaleString()} đã bán</span>
+              <span suppressHydrationWarning>{product.sold.toLocaleString()} đã bán</span>
             </div>
           )}
           {product.stock !== undefined && (
@@ -73,12 +81,24 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }: ProductCardProps) => {
         </div>
       </CardHeader>
       <CardContent className="flex-grow flex flex-col justify-end">
-        <div className="flex items-baseline gap-1 mb-4 min-h-[44px]">
-          <span className="text-3xl font-bold text-white">
-            {product.price.toLocaleString("vi-VN")}
-          </span>
-          <span className="text-purple-400 font-semibold">Cá</span>
-          <span className="text-gray-400 text-sm">{product.duration}</span>
+        <div className="mb-4 min-h-[44px]">
+          {/* Original Price (if discount) */}
+          {product.originalPrice && product.discount && (
+            <div className="flex items-baseline gap-2 mb-1">
+              <span className="text-gray-500 line-through text-lg" suppressHydrationWarning>
+                {product.originalPrice.toLocaleString("vi-VN")}
+              </span>
+              <span className="text-gray-500 text-xs">Cá</span>
+            </div>
+          )}
+          {/* Current Price */}
+          <div className="flex items-baseline gap-1">
+            <span className="text-3xl font-bold text-white" suppressHydrationWarning>
+              {product.price.toLocaleString("vi-VN")}
+            </span>
+            <span className="text-purple-400 font-semibold">Cá</span>
+            <span className="text-gray-400 text-sm">{product.duration}</span>
+          </div>
         </div>
 
         <div className="flex gap-2">

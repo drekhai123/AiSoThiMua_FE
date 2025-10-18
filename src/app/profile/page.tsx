@@ -175,10 +175,7 @@ export default function ProfilePage() {
                 <div className="flex-shrink-0">
                   <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg shadow-purple-500/30">
                     <Image
-                      src={
-                        user?.avatar ||
-                        `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email}`
-                      }
+                      src="/team/member.png"
                       alt={user?.fullName || "User"}
                       fill
                       className="object-cover"

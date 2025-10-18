@@ -86,23 +86,31 @@ const PRODUCTS_DATA: Product[] = [
     id: "7",
     name: "Google Gemini Advanced",
     price: 449, // Cá
+    originalPrice: 599,
+    discount: 25, // Giảm 25%
     duration: "/tháng",
     description: "AI model tiên tiến nhất từ Google với Gemini Ultra",
     logo: "/techlogos/gemini.svg",
     category: "AI Chat",
     techLogo: "Google Gemini",
     badge: "Mới",
+    sold: 890,
+    stock: "unlimited",
   },
   {
     id: "8",
     name: "YouTube Premium",
     price: 179, // Cá
+    originalPrice: 229, // Giá gốc
+    discount: 22, // Giảm 22%
     duration: "/tháng",
     description: "Xem video không quảng cáo, nghe nhạc background, tải offline",
     logo: "/techlogos/youtube.svg",
     category: "Entertainment",
     techLogo: "Youtube",
     badge: "Phổ biến",
+    sold: 2100,
+    stock: "unlimited",
   },
   {
     id: "9",

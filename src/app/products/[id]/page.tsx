@@ -582,6 +582,12 @@ export default function ProductDetailPage() {
 
             {/* Product Tags */}
             <div className="flex flex-wrap gap-3 mb-6">
+              {/* Discount Badge */}
+              {product.discount && product.originalPrice && (
+                <span className="px-4 py-2 bg-red-500 text-white rounded-full text-sm font-bold shadow-lg">
+                  Giảm {product.discount}%
+                </span>
+              )}
               {(Array.isArray(product.category) ? product.category : [product.category]).map((cat, idx) => (
                 <span
                   key={idx}
@@ -922,6 +928,19 @@ export default function ProductDetailPage() {
                 )}
                 <div className="h-px bg-slate-700"></div>
               </div>
+
+              {/* Original Price (if discount) */}
+              {product.originalPrice && product.discount && (
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-gray-500 line-through text-2xl">
+                    {product.originalPrice.toLocaleString()}
+                  </span>
+                  <span className="text-gray-500 text-sm">Cá</span>
+                  <span className="px-2 py-1 bg-red-500 text-white text-xs font-bold rounded">
+                    -{product.discount}%
+                  </span>
+                </div>
+              )}
 
               <div className="flex items-baseline gap-2 mb-2">
                 <span className="text-5xl font-bold text-white">

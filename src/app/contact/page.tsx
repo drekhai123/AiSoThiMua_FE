@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Mail,
   Phone,
@@ -51,6 +51,52 @@ const WHY_CHOOSE = [
   { icon: Headphones, text: "Tư vấn miễn phí 24/7" },
 ];
 
+const PLANS = [
+  {
+    name: "Gói Cơ Bản",
+    subtitle: "Khởi đầu nhanh gọn",
+    price: "3-5 triệu",
+    features: [
+      "Thiết kế chuẩn UX/UI",
+      "Responsive trên mọi thiết bị",
+      "Tối ưu tốc độ cơ bản",
+      "Form liên hệ + bản đồ",
+      "SEO on-page cơ bản",
+    ],
+    cta: "Chọn gói Cơ bản",
+    highlight: false,
+  },
+  {
+    name: "Gói Tiêu Chuẩn",
+    subtitle: "Phù hợp đa số doanh nghiệp",
+    price: "8-12 triệu",
+    features: [
+      "Tất cả của Cơ bản",
+      "SEO nâng cao + Schema",
+      "Trang sản phẩm/dịch vụ",
+      "CMS quản trị nội dung",
+      "Tích hợp Blog & Analytics",
+    ],
+    cta: "Chọn gói Tiêu chuẩn",
+    highlight: true,
+    badge: "Phổ biến",
+  },
+  {
+    name: "Gói Cao Cấp",
+    subtitle: "Tùy chỉnh chuyên sâu",
+    price: "15-30 triệu",
+    features: [
+      "Tất cả của Tiêu chuẩn",
+      "Thiết kế nhận diện độc quyền",
+      "Hiệu ứng/animation cao cấp",
+      "Đa ngôn ngữ & tối ưu chuyển đổi",
+      "Bảo trì 3-6 tháng",
+    ],
+    cta: "Chọn gói Cao cấp",
+    highlight: false,
+  },
+];
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -62,6 +108,7 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const contactFormRef = useRef<HTMLElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,6 +140,19 @@ export default function ContactPage() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const scrollToContactForm = (planName: string) => {
+    if (contactFormRef.current) {
+      contactFormRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Optional: pre-fill the message with selected plan
+      setTimeout(() => {
+        setFormData(prev => ({
+          ...prev,
+          message: `Tôi quan tâm đến ${planName}. `
+        }));
+      }, 500);
+    }
   };
 
   return (
@@ -174,8 +234,69 @@ export default function ContactPage() {
         </div>
       </section>
 
+      {/* Gói thiết kế website */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-3">Gói thiết kế website</h2>
+            <p className="text-gray-400">Linh hoạt theo nhu cầu và ngân sách của bạn</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {PLANS.map((plan, idx) => (
+              <div
+                key={idx}
+                className={`relative rounded-xl border ${
+                  plan.highlight ? "border-purple-500/60 ring-2 ring-purple-500/40" : "border-slate-700"
+                } bg-gradient-to-br from-slate-800 to-slate-900 p-6 hover:translate-y-[-2px] transition-all`}
+              >
+                {plan.highlight && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg">
+                    {plan.badge}
+                  </div>
+                )}
+
+                <div className="mb-5">
+                  <h3 className="text-xl font-bold text-white">{plan.name}</h3>
+                  <p className="text-gray-400 text-sm mt-1">{plan.subtitle}</p>
+                </div>
+
+                <div className="mb-6">
+                  <span className="text-4xl font-extrabold text-white">{plan.price}</span>
+                  <span className="text-gray-400 ml-1">/ trọn gói</span>
+                </div>
+
+                <ul className="space-y-3 mb-6">
+                  {plan.features.map((f, i) => (
+                    <li key={i} className="flex items-start gap-2 text-gray-300">
+                      <CheckCircle className="w-4 h-4 mt-0.5 text-green-400 flex-shrink-0" />
+                      <span className="text-sm">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => scrollToContactForm(plan.name)}
+                  className={`w-full px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
+                    plan.highlight
+                      ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+                      : "bg-slate-700 hover:bg-slate-600 text-white"
+                  }`}
+                >
+                  <Send className="w-5 h-5" /> {plan.cta}
+                </button>
+
+                {plan.highlight && (
+                  <p className="text-center text-xs text-gray-400 mt-3">Khuyến nghị cho 80% khách hàng</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Contact Form & Info Section */}
-      <section className="py-20">
+      <section ref={contactFormRef} className="py-20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Contact Info */}

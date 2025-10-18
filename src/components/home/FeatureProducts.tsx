@@ -146,12 +146,12 @@ const FeatureProducts = () => {
                 {/* Sold Info */}
                 <div className="flex items-center gap-2 mt-2 text-gray-400 text-sm">
                   <TrendingUp className="w-4 h-4" />
-                  <span>{product.sold.toLocaleString()} đã bán</span>
+                  <span suppressHydrationWarning>{product.sold.toLocaleString()} đã bán</span>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="flex items-baseline gap-1 mb-4">
-                  <span className="text-3xl font-bold text-white">{product.price.toLocaleString()}</span>
+                  <span className="text-3xl font-bold text-white" suppressHydrationWarning>{product.price.toLocaleString()}</span>
                   <span className="text-purple-400 font-semibold">Cá</span>
                   <span className="text-gray-400 text-sm">{product.duration}</span>
                 </div>

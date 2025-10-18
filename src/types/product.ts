@@ -24,6 +24,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  originalPrice?: number; // Giá gốc (trước khi giảm), nếu có
   duration: string;
   pricingPlans?: PricingPlan[]; // Các gói giá khác nhau
   warrantyPlans?: WarrantyPlan[]; // Các gói bảo hành
@@ -34,7 +35,7 @@ export interface Product {
   category: string | string[]; // Có thể là 1 hoặc nhiều danh mục
   techLogo: string; // Technology brand (OpenAI, Google, etc.)
   badge?: string;
-  discount?: number;
+  discount?: number; // % giảm giá (tính từ originalPrice)
   rating?: number;
   features?: string[];
   sold?: number; // Số lượng đã bán
