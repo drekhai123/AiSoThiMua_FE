@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Hero = () => {
   return (
     <section className="relative pt-32 pb-15 overflow-hidden">
@@ -27,18 +29,18 @@ const Hero = () => {
 
           {/* Call-to-Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200">
-            <a
+            <Link
               href="/products"
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105"
             >
               Khám phá sản phẩm
-            </a>
-            <a
+            </Link>
+            <Link
               href="/wallet"
               className="bg-slate-800 border-2 border-purple-500 text-white font-semibold px-8 py-3 rounded-lg hover:bg-slate-700 transition-all"
             >
               Nạp tiền ngay
-            </a>
+            </Link>
           </div>
 
           {/* Social Proof */}

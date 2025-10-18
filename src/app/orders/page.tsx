@@ -112,16 +112,10 @@ const STATUS_FILTERS = [
 
 export default function OrdersPage() {
   const router = useRouter();
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [orders] = useState<Order[]>(MOCK_ORDERS);
-
-  // Redirect if not authenticated
-  if (!isLoading && !isAuthenticated) {
-    router.push("/login");
-    return null;
-  }
 
   // Filter orders
   const filteredOrders = useMemo(() => {
@@ -148,6 +142,12 @@ export default function OrdersPage() {
       cancelled: orders.filter((o) => o.status === "cancelled").length,
     };
   }, [orders]);
+
+  // Redirect if not authenticated
+  if (!isLoading && !isAuthenticated) {
+    router.push("/login");
+    return null;
+  }
 
   if (isLoading) {
     return (
