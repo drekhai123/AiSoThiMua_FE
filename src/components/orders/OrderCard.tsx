@@ -12,8 +12,6 @@ import {
   Eye,
   Star,
   MessageSquare,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 
 const STATUS_INFO: Record<string, OrderStatusInfo> = {
@@ -67,7 +65,6 @@ interface OrderCardProps {
 }
 
 export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<OrderItem | null>(null);
   const statusInfo = STATUS_INFO[order.status];
@@ -229,30 +226,9 @@ export default function OrderCard({ order, onViewDetail }: OrderCardProps) {
             ))}
           </div>
 
-          {/* Fade overlay for scroll indication */}
-          <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-slate-800 to-transparent pointer-events-none z-10"></div>
-          <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-slate-800 to-transparent pointer-events-none z-10"></div>
+          {/* Fade overlay removed to fix UI conflicts */}
         </div>
 
-        {/* Expand/Collapse Button */}
-        {order.items.length > 3 && (
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full mt-2 py-1 text-gray-400 hover:text-white text-xs transition-colors flex items-center justify-center gap-1"
-          >
-            {isExpanded ? (
-              <>
-                <ChevronUp className="w-3 h-3" />
-                Thu gọn
-              </>
-            ) : (
-              <>
-                <ChevronDown className="w-3 h-3" />
-                Xem tất cả ({order.items.length} sản phẩm)
-              </>
-            )}
-          </button>
-        )}
       </div>
 
       {/* Action Buttons */}
