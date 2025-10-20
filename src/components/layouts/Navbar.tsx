@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { User, LogOut, Settings, ShoppingBag, Heart, ChevronDown, Bell, ShoppingCart, Trash2, Plus, Minus } from "lucide-react";
+import { User, LogOut, Settings, ShoppingBag, Heart, ChevronDown, Bell, ShoppingCart, Trash2, Plus, Minus, FileText } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 
@@ -435,6 +435,14 @@ export default function Navbar() {
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                                                 </svg>
                                                 <span>Ví của tôi</span>
+                                            </Link>
+                                            <Link
+                                                href="/terms"
+                                                onClick={() => setIsDropdownOpen(false)}
+                                                className="flex items-center space-x-3 px-4 py-2 text-gray-300 hover:bg-slate-700 hover:text-white transition-colors"
+                                            >
+                                                <FileText className="w-4 h-4 text-purple-500 hover:text-purple-400 transition-colors" />
+                                                <span>Điều khoản dịch vụ</span>
                                             </Link>
                                             {/* <Link
                                                 href="/wishlist"

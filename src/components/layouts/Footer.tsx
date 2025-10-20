@@ -85,10 +85,10 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
+                <Link href="/terms" className="text-muted-foreground hover:text-primary transition-all duration-300 flex items-center gap-2 hover:translate-x-1 hover:scale-105 group">
+                  <FileText className="w-4 h-4 group-hover:text-green-400 transition-colors" />
                   Điều khoản dịch vụ
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
@@ -127,6 +127,9 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8">
+          <div className="mb-4 p-3 bg-yellow-500/20 border border-yellow-500/40 rounded">
+            <p className="text-white font-semibold">Verification code: OS7K3L</p>
+          </div>
           <p className="text-muted-foreground">
             © 2025 ASTM. Tất cả quyền được bảo lưu
           </p>
