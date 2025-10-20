@@ -16,26 +16,27 @@ export default function RegisterForm() {
     email: "",
     password: "",
     confirmPassword: "",
+    notificationsOptIn: true,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate form
     const validationErrors = validateRegisterForm(formData);
-    
+
     if (hasErrors(validationErrors)) {
       setErrors(validationErrors);
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     // TODO: Implement register logic here
     console.log("Register data:", formData);
-    
+
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
@@ -45,12 +46,12 @@ export default function RegisterForm() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     });
-    
+
     // Clear error when user types
     if (errors[name as keyof FormErrors]) {
       const newErrors = { ...errors };
@@ -71,7 +72,7 @@ export default function RegisterForm() {
         </div>
         <span className="font-medium">Về trang chủ</span>
       </Link>
-      
+
       {/* Card Container */}
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-xl p-8 space-y-6">
         {/* Header */}
@@ -103,9 +104,8 @@ export default function RegisterForm() {
                 required
                 value={formData.fullName}
                 onChange={handleChange}
-                className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${
-                  errors.fullName ? "border-red-500" : "border-purple-600"
-                }`}
+                className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${errors.fullName ? "border-red-500" : "border-purple-600"
+                  }`}
                 placeholder="Nguyễn Văn A"
                 suppressHydrationWarning
               />
@@ -132,9 +132,8 @@ export default function RegisterForm() {
                 required
                 value={formData.phone}
                 onChange={handleChange}
-                className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${
-                  errors.phone ? "border-red-500" : "border-purple-600"
-                }`}
+                className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${errors.phone ? "border-red-500" : "border-purple-600"
+                  }`}
                 placeholder="0912345678"
                 suppressHydrationWarning
               />
@@ -161,9 +160,8 @@ export default function RegisterForm() {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${
-                  errors.email ? "border-red-500" : "border-purple-600"
-                }`}
+                className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${errors.email ? "border-red-500" : "border-purple-600"
+                  }`}
                 placeholder="name@example.com"
                 suppressHydrationWarning
               />
@@ -190,9 +188,8 @@ export default function RegisterForm() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className={`block w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${
-                  errors.password ? "border-red-500" : "border-purple-600"
-                }`}
+                className={`block w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${errors.password ? "border-red-500" : "border-purple-600"
+                  }`}
                 placeholder="••••••••"
                 suppressHydrationWarning
               />
@@ -230,9 +227,8 @@ export default function RegisterForm() {
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={`block w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${
-                  errors.confirmPassword ? "border-red-500" : "border-purple-600"
-                }`}
+                className={`block w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 outline-none ${errors.confirmPassword ? "border-red-500" : "border-purple-600"
+                  }`}
                 placeholder="••••••••"
                 suppressHydrationWarning
               />
@@ -251,6 +247,21 @@ export default function RegisterForm() {
             {errors.confirmPassword && (
               <p className="text-sm text-red-400">{errors.confirmPassword}</p>
             )}
+          </div>
+
+          {/* Marketing/Notifications Opt-In */}
+          <div className="flex items-start gap-3 rounded-lg bg-slate-800/40 border border-slate-700 p-4">
+            <input
+              id="notificationsOptIn"
+              name="notificationsOptIn"
+              type="checkbox"
+              checked={!!formData.notificationsOptIn}
+              onChange={handleChange}
+              className="mt-1 h-4 w-4 rounded border-slate-600 text-purple-600 focus:ring-purple-500"
+            />
+            <label htmlFor="notificationsOptIn" className="text-sm text-gray-300">
+              Tôi muốn nhận thông báo và ưu đãi mới qua email.
+            </label>
           </div>
 
           {/* Submit Button */}

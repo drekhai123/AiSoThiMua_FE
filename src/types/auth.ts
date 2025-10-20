@@ -6,6 +6,7 @@ export interface RegisterFormData {
   email: string;
   password: string;
   confirmPassword: string;
+  notificationsOptIn?: boolean; // Người dùng đồng ý nhận thông báo/khuyến mãi
 }
 
 export interface LoginFormData {

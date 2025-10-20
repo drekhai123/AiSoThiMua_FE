@@ -20,9 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
+    <html lang="vi" className="dark">
       <body
-        className={`${inter.variable} antialiased`}
+        className={`${inter.variable} antialiased dark`}
       >
         <LayoutProvider>
           {children}
