@@ -131,10 +131,10 @@ export default function TermsPage() {
                     <div>
                       <h3 className="text-xl font-bold text-white mb-3">1. Định nghĩa</h3>
                       <div className="text-gray-300 space-y-2">
-                        <p><strong className="text-white">"Chúng tôi", "Công ty"</strong> - Chỉ AiSoThiMua</p>
-                        <p><strong className="text-white">"Bạn", "Khách hàng"</strong> - Người sử dụng dịch vụ</p>
-                        <p><strong className="text-white">"Dịch vụ"</strong> - Các sản phẩm AI và công nghệ được cung cấp</p>
-                        <p><strong className="text-white">"Tài khoản"</strong> - Thông tin đăng nhập và quản lý của khách hàng</p>
+                        <p><strong className="text-white">&quot;Chúng tôi&quot;, &quot;Công ty&quot;</strong> - Chỉ AiSoThiMua</p>
+                        <p><strong className="text-white">&quot;Bạn&quot;, &quot;Khách hàng&quot;</strong> - Người sử dụng dịch vụ</p>
+                        <p><strong className="text-white">&quot;Dịch vụ&quot;</strong> - Các sản phẩm AI và công nghệ được cung cấp</p>
+                        <p><strong className="text-white">&quot;Tài khoản&quot;</strong> - Thông tin đăng nhập và quản lý của khách hàng</p>
                       </div>
                     </div>
 
@@ -155,7 +155,7 @@ export default function TermsPage() {
                         </li>
                         <li className="flex items-start gap-2">
                           <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-1" />
-                          <span>Không được chia sẻ tài khoản với người khác</span>
+                          <span className="text-gray-300">Không được chia sẻ tài khoản với người khác</span>
                         </li>
                       </ul>
                     </div>
