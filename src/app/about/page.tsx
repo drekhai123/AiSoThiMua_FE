@@ -1,6 +1,6 @@
 "use client";
 
-import { Shield, Zap, Heart, Users, TrendingUp, Award, CheckCircle, Star, Code, Palette, Rocket, Smartphone } from "lucide-react";
+import { Shield, Zap, Heart, TrendingUp, Award, CheckCircle, Star, Code, Palette, Smartphone } from "lucide-react";
 import Image from "next/image";
 
 const SERVICES = [

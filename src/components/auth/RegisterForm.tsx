@@ -20,6 +20,7 @@ export default function RegisterForm() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [showPhoneConfirmation, setShowPhoneConfirmation] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +33,11 @@ export default function RegisterForm() {
       return;
     }
 
+    // Show phone confirmation instead of direct submit
+    setShowPhoneConfirmation(true);
+  };
+
+  const handlePhoneConfirm = () => {
     setIsLoading(true);
 
     // TODO: Implement register logic here
@@ -43,6 +49,10 @@ export default function RegisterForm() {
       // Redirect to OTP verification page with email
       router.push(`/verify-otp?email=${encodeURIComponent(formData.email)}`);
     }, 1500);
+  };
+
+  const handlePhoneEdit = () => {
+    setShowPhoneConfirmation(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +82,66 @@ export default function RegisterForm() {
         </div>
         <span className="font-medium">Về trang chủ</span>
       </Link>
+
+      {/* Phone Confirmation Modal */}
+      {showPhoneConfirmation && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full">
+            <div className="text-center space-y-6">
+              {/* Warning Icon */}
+              <div className="w-16 h-16 bg-yellow-500/10 border border-yellow-500/30 rounded-full flex items-center justify-center mx-auto">
+                <Phone className="w-8 h-8 text-yellow-400" />
+              </div>
+
+              {/* Title */}
+              <h2 className="text-2xl font-bold text-white">
+                Xác nhận số điện thoại
+              </h2>
+
+              {/* Phone Display */}
+              <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4">
+                <p className="text-gray-300 text-sm mb-2">Số điện thoại của bạn:</p>
+                <p className="text-2xl font-bold text-white font-mono">
+                  {formData.phone}
+                </p>
+              </div>
+
+              {/* Warning Message */}
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-left">
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5">⚠️</div>
+                  <div>
+                    <p className="text-red-300 font-semibold text-sm mb-2">
+                      Lưu ý quan trọng:
+                    </p>
+                    <ul className="text-red-200 text-xs space-y-1">
+                      <li>• Số điện thoại này sẽ <strong>không thể thay đổi</strong> sau khi đăng ký</li>
+                      <li>• Số điện thoại <strong>không hợp lệ</strong> sẽ không nhận được ưu đãi và thậm chí có thể bị <strong>khóa tài khoản</strong></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handlePhoneEdit}
+                  className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all font-semibold"
+                >
+                  Chỉnh sửa
+                </button>
+                <button
+                  onClick={handlePhoneConfirm}
+                  disabled={isLoading}
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? "Đang xử lý..." : "Xác nhận"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Card Container */}
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-xl p-8 space-y-6">

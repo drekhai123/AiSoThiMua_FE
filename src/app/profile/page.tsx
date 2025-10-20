@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
+import ImageUpload from "@/components/ui/image-upload";
 import {
   User,
   Mail,
@@ -11,7 +12,6 @@ import {
   Calendar,
   Shield,
   Bell,
-  CreditCard,
   Package,
   DollarSign,
   Star,
@@ -19,17 +19,25 @@ import {
   Lock,
   Save,
   X,
+  CheckCircle,
+  Eye,
+  EyeOff,
+  AlertCircle,
 } from "lucide-react";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [tempAvatarUrl, setTempAvatarUrl] = useState<string>("");
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
     email: "",
   });
+  const [avatarUrl, setAvatarUrl] = useState<string>("/team/member.png");
 
   // Mock statistics
   const stats = {
@@ -63,6 +71,8 @@ export default function ProfilePage() {
         phone: user.phone || "",
         email: user.email,
       });
+      // Set default avatar if user has one
+      setAvatarUrl(user.avatar || "/team/member.png");
     }
   }, [user]);
 
@@ -82,8 +92,37 @@ export default function ProfilePage() {
 
   const handleSave = () => {
     // TODO: Implement update user info
-    console.log("Save user data:", formData);
+    console.log("Save user data:", { ...formData, avatar: avatarUrl });
     setIsEditing(false);
+  };
+
+  const handleAvatarUpload = (url: string) => {
+    setTempAvatarUrl(url);
+    // Không tự động đóng modal, để user có thể preview và lưu
+  };
+
+  const handleAvatarError = (error: string) => {
+    console.error("Avatar upload error:", error);
+    // TODO: Show error toast
+  };
+
+  const handleSaveAvatar = () => {
+    if (tempAvatarUrl) {
+      setAvatarUrl(tempAvatarUrl);
+      setShowAvatarModal(false);
+      setTempAvatarUrl("");
+      // TODO: Save avatar URL to user profile
+    }
+  };
+
+  const handleOpenAvatarModal = () => {
+    setTempAvatarUrl("");
+    setShowAvatarModal(true);
+  };
+
+  const handleCloseAvatarModal = () => {
+    setShowAvatarModal(false);
+    setTempAvatarUrl("");
   };
 
   const handleCancel = () => {
@@ -93,6 +132,7 @@ export default function ProfilePage() {
         phone: user.phone || "",
         email: user.email,
       });
+      setAvatarUrl(user.avatar || "/team/member.png");
     }
     setIsEditing(false);
   };
@@ -175,13 +215,17 @@ export default function ProfilePage() {
                 <div className="flex-shrink-0">
                   <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg shadow-purple-500/30">
                     <Image
-                      src="/team/member.png"
+                      src={typeof avatarUrl === 'string' && avatarUrl ? avatarUrl : "/team/member.png"}
                       alt={user?.fullName || "User"}
                       fill
+                      sizes="128px"
                       className="object-cover"
                     />
                   </div>
-                  <button className="mt-3 w-full px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm rounded-lg transition-all">
+                  <button
+                    onClick={handleOpenAvatarModal}
+                    className="mt-3 w-full px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm rounded-lg transition-all"
+                  >
                     Đổi ảnh
                   </button>
                 </div>
@@ -229,21 +273,9 @@ export default function ProfilePage() {
                       <Phone className="w-4 h-4" />
                       Số điện thoại
                     </label>
-                    {isEditing ? (
-                      <input
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
-                        }
-                        className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Nhập số điện thoại"
-                      />
-                    ) : (
-                      <p className="text-white">
-                        {user?.phone || "Chưa cập nhật"}
-                      </p>
-                    )}
+                    <p className="text-white">
+                      {user?.phone || "Chưa cập nhật"}
+                    </p>
                   </div>
 
                   {/* Member Since */}
@@ -268,7 +300,10 @@ export default function ProfilePage() {
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <button className="flex items-center gap-3 p-4 bg-slate-700/50 hover:bg-slate-700 rounded-lg transition-all group">
+                <button
+                  onClick={() => setShowPasswordModal(true)}
+                  className="flex items-center gap-3 p-4 bg-slate-700/50 hover:bg-slate-700 rounded-lg transition-all group"
+                >
                   <div className="p-3 bg-purple-500/10 rounded-lg group-hover:bg-purple-500/20 transition-all">
                     <Lock className="w-5 h-5 text-purple-400" />
                   </div>
@@ -280,15 +315,25 @@ export default function ProfilePage() {
                   </div>
                 </button>
 
-                <button className="flex items-center gap-3 p-4 bg-slate-700/50 hover:bg-slate-700 rounded-lg transition-all group">
-                  <div className="p-3 bg-blue-500/10 rounded-lg group-hover:bg-blue-500/20 transition-all">
-                    <Shield className="w-5 h-5 text-blue-400" />
+                <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg opacity-60">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-gray-500/10 rounded-lg">
+                      <Shield className="w-5 h-5 text-gray-400" />
+                    </div>
+                    <div>
+                      <p className="text-white font-medium">Xác thực 2 bước</p>
+                      <p className="text-gray-400 text-sm">Tính năng đang phát triển</p>
+                    </div>
                   </div>
-                  <div className="text-left">
-                    <p className="text-white font-medium">Xác thực 2 bước</p>
-                    <p className="text-gray-400 text-sm">Chưa kích hoạt</p>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-yellow-400 bg-yellow-500/10 px-2 py-1 rounded">
+                      Sắp ra mắt
+                    </span>
+                    <div className="w-11 h-6 bg-slate-600 rounded-full cursor-not-allowed opacity-50">
+                      <div className="w-5 h-5 bg-white rounded-full mt-0.5 ml-0.5"></div>
+                    </div>
                   </div>
-                </button>
+                </div>
               </div>
             </div>
 
@@ -413,7 +458,10 @@ export default function ProfilePage() {
                   <span className="text-white">Xem đơn hàng</span>
                 </button>
 
-                <button className="w-full flex items-center gap-3 p-3 bg-slate-700 hover:bg-slate-600 rounded-lg transition-all text-left">
+                <button
+                  onClick={() => router.push("/notifications")}
+                  className="w-full flex items-center gap-3 p-3 bg-slate-700 hover:bg-slate-600 rounded-lg transition-all text-left"
+                >
                   <Bell className="w-5 h-5 text-green-400" />
                   <span className="text-white">Cài đặt thông báo</span>
                 </button>
@@ -434,8 +482,413 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
+
+        {/* Avatar Upload Modal */}
+        {showAvatarModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <User className="w-6 h-6" />
+                  Đổi ảnh đại diện
+                </h2>
+                <button
+                  onClick={handleCloseAvatarModal}
+                  className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-400" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {/* Avatar Comparison */}
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Current Avatar */}
+                  <div className="text-center">
+                    <p className="text-gray-400 text-sm mb-3">Ảnh hiện tại:</p>
+                    <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-gray-600 shadow-lg">
+                      <Image
+                        src={typeof avatarUrl === 'string' && avatarUrl ? avatarUrl : "/team/member.png"}
+                        alt="Current Avatar"
+                        fill
+                        sizes="80px"
+                        className="object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  {/* New Avatar Preview */}
+                  <div className="text-center">
+                    <p className="text-gray-400 text-sm mb-3">Ảnh mới:</p>
+                    <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-purple-500 shadow-lg shadow-purple-500/30">
+                      {tempAvatarUrl ? (
+                        <Image
+                          src={tempAvatarUrl}
+                          alt="New Avatar Preview"
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-slate-700 flex items-center justify-center">
+                          <User className="w-8 h-8 text-gray-500" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Image Upload Component */}
+                <ImageUpload
+                  onUpload={handleAvatarUpload}
+                  onError={handleAvatarError}
+                  currentImage={tempAvatarUrl || undefined}
+                  placeholder="Chọn ảnh mới"
+                  maxSize={2}
+                  acceptedTypes={['image/jpeg', 'image/png', 'image/webp']}
+                />
+
+                {/* Info */}
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5">ℹ️</div>
+                    <div>
+                      <p className="text-blue-300 font-semibold text-sm mb-1">Lưu ý:</p>
+                      <ul className="text-blue-200 text-xs space-y-1">
+                        <li>• Kích thước tối đa: 2MB</li>
+                        <li>• Định dạng: JPG, PNG, WEBP</li>
+                        <li>• Ảnh sẽ được tự động resize về kích thước phù hợp</li>
+                        <li>• Nhấn &quot;Lưu&quot; để áp dụng ảnh mới</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleCloseAvatarModal}
+                    className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all font-semibold"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    onClick={handleSaveAvatar}
+                    disabled={!tempAvatarUrl}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Change Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <ChangePasswordModal onClose={() => setShowPasswordModal(false)} />
+          </div>
+        </div>
+      )}
     </main>
+  );
+}
+
+// Change Password Modal Component
+interface ChangePasswordModalProps {
+  onClose: () => void;
+}
+
+function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
+  const [formData, setFormData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [success, setSuccess] = useState(false);
+
+  // Password validation
+  const validatePassword = (password: string) => ({
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /\d/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  });
+
+  const passwordValidation = validatePassword(formData.newPassword);
+  const isPasswordValid = Object.values(passwordValidation).every(Boolean);
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const togglePasswordVisibility = (field: keyof typeof showPasswords) => {
+    setShowPasswords(prev => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.currentPassword) {
+      newErrors.currentPassword = "Vui lòng nhập mật khẩu hiện tại";
+    }
+
+    if (!formData.newPassword) {
+      newErrors.newPassword = "Vui lòng nhập mật khẩu mới";
+    } else if (!isPasswordValid) {
+      newErrors.newPassword = "Mật khẩu không đủ mạnh";
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu mới";
+    } else if (formData.newPassword !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu xác nhận không khớp";
+    }
+
+    if (formData.currentPassword && formData.newPassword && formData.currentPassword === formData.newPassword) {
+      newErrors.newPassword = "Mật khẩu mới phải khác mật khẩu hiện tại";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+
+    try {
+      // TODO: Implement API call
+      console.log("Changing password:", formData);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      setSuccess(true);
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } catch (error) {
+      setErrors({ currentPassword: "Mật khẩu hiện tại không đúng" });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <div className="p-6 text-center">
+        <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-8 h-8 text-green-400" />
+        </div>
+        <h3 className="text-xl font-bold text-white mb-2">Đổi mật khẩu thành công!</h3>
+        <p className="text-gray-400 text-sm">Mật khẩu đã được cập nhật.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-purple-500/10 rounded-lg">
+            <Shield className="w-5 h-5 text-purple-400" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-white">Đổi mật khẩu</h2>
+            <p className="text-gray-400 text-sm">Cập nhật mật khẩu mới</p>
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+        >
+          <X className="w-5 h-5 text-gray-400" />
+        </button>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Current Password */}
+        <div>
+          <label className="block text-white font-medium mb-2 text-sm">
+            Mật khẩu hiện tại <span className="text-red-400">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type={showPasswords.current ? "text" : "password"}
+              value={formData.currentPassword}
+              onChange={(e) => handleInputChange("currentPassword", e.target.value)}
+              className={`w-full px-3 py-2 pr-10 bg-slate-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm ${errors.currentPassword ? "border-red-500" : "border-slate-600"
+                }`}
+              placeholder="Nhập mật khẩu hiện tại"
+            />
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("current")}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+            >
+              {showPasswords.current ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
+            </button>
+          </div>
+          {errors.currentPassword && (
+            <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
+              <AlertCircle className="w-3 h-3" />
+              {errors.currentPassword}
+            </p>
+          )}
+        </div>
+
+        {/* New Password */}
+        <div>
+          <label className="block text-white font-medium mb-2 text-sm">
+            Mật khẩu mới <span className="text-red-400">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type={showPasswords.new ? "text" : "password"}
+              value={formData.newPassword}
+              onChange={(e) => handleInputChange("newPassword", e.target.value)}
+              className={`w-full px-3 py-2 pr-10 bg-slate-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm ${errors.newPassword ? "border-red-500" : "border-slate-600"
+                }`}
+              placeholder="Nhập mật khẩu mới"
+            />
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("new")}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+            >
+              {showPasswords.new ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
+            </button>
+          </div>
+          {errors.newPassword && (
+            <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
+              <AlertCircle className="w-3 h-3" />
+              {errors.newPassword}
+            </p>
+          )}
+
+          {/* Password Requirements */}
+          {formData.newPassword && (
+            <div className="mt-2 space-y-1">
+              <div className="grid grid-cols-2 gap-1 text-xs">
+                <div className={`flex items-center gap-1 ${passwordValidation.length ? "text-green-400" : "text-gray-400"}`}>
+                  <div className={`w-3 h-3 rounded-full flex items-center justify-center ${passwordValidation.length ? "bg-green-500" : "bg-slate-600"}`}>
+                    {passwordValidation.length && <CheckCircle className="w-2 h-2 text-white" />}
+                  </div>
+                  8+ ký tự
+                </div>
+                <div className={`flex items-center gap-1 ${passwordValidation.uppercase ? "text-green-400" : "text-gray-400"}`}>
+                  <div className={`w-3 h-3 rounded-full flex items-center justify-center ${passwordValidation.uppercase ? "bg-green-500" : "bg-slate-600"}`}>
+                    {passwordValidation.uppercase && <CheckCircle className="w-2 h-2 text-white" />}
+                  </div>
+                  Chữ hoa
+                </div>
+                <div className={`flex items-center gap-1 ${passwordValidation.lowercase ? "text-green-400" : "text-gray-400"}`}>
+                  <div className={`w-3 h-3 rounded-full flex items-center justify-center ${passwordValidation.lowercase ? "bg-green-500" : "bg-slate-600"}`}>
+                    {passwordValidation.lowercase && <CheckCircle className="w-2 h-2 text-white" />}
+                  </div>
+                  Chữ thường
+                </div>
+                <div className={`flex items-center gap-1 ${passwordValidation.number ? "text-green-400" : "text-gray-400"}`}>
+                  <div className={`w-3 h-3 rounded-full flex items-center justify-center ${passwordValidation.number ? "bg-green-500" : "bg-slate-600"}`}>
+                    {passwordValidation.number && <CheckCircle className="w-2 h-2 text-white" />}
+                  </div>
+                  Số
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Confirm Password */}
+        <div>
+          <label className="block text-white font-medium mb-2 text-sm">
+            Xác nhận mật khẩu <span className="text-red-400">*</span>
+          </label>
+          <div className="relative">
+            <input
+              type={showPasswords.confirm ? "text" : "password"}
+              value={formData.confirmPassword}
+              onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+              className={`w-full px-3 py-2 pr-10 bg-slate-700 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm ${errors.confirmPassword ? "border-red-500" : "border-slate-600"
+                }`}
+              placeholder="Nhập lại mật khẩu mới"
+            />
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("confirm")}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+            >
+              {showPasswords.confirm ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
+            </button>
+          </div>
+          {errors.confirmPassword && (
+            <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
+              <AlertCircle className="w-3 h-3" />
+              {errors.confirmPassword}
+            </p>
+          )}
+        </div>
+
+        {/* Buttons */}
+        <div className="flex gap-3 pt-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all font-medium text-sm"
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            disabled={isLoading || !isPasswordValid || !formData.currentPassword || !formData.confirmPassword}
+            className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {isLoading ? (
+              <>
+                <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Đang cập nhật...
+              </>
+            ) : (
+              "Đổi mật khẩu"
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
 
