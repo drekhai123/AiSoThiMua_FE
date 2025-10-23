@@ -18,7 +18,7 @@ export default function LayoutProvider({
   // Các trang không hiển thị Navbar và Footer
   const hideLayout = pathname === "/login" || pathname === "/register" ||
     pathname === "/verify-otp" || pathname === "/reset-password"
-    || pathname === "/forgot-password" || pathname === "/two-factor" || pathname === "/change-password";
+    || pathname === "/forgot-password" || pathname === "/two-factor" || pathname === "/change-password" || pathname?.startsWith("/aduconcachienxu");
 
   return (
     <LoadingProvider>

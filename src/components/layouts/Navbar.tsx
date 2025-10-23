@@ -150,6 +150,15 @@ export default function Navbar() {
                             }`}></span>
                     </Link>
                     <Link
+                        href="/news"
+                        className={`relative text-white hover:text-purple-200 transition-all py-2 group ${pathname === "/news" || pathname?.startsWith("/news/") ? "font-semibold" : ""
+                            }`}
+                    >
+                        Tin tức
+                        <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-white transform transition-transform duration-300 ${pathname === "/news" || pathname?.startsWith("/news/") ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                            }`}></span>
+                    </Link>
+                    <Link
                         href="/about"
                         className={`relative text-white hover:text-purple-200 transition-all py-2 group ${pathname === "/about" ? "font-semibold" : ""
                             }`}

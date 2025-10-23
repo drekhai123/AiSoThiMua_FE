@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Wallet, Plus, TrendingUp, History, CreditCard, Gift } from "lucide-react";
 import { DepositPackage, Transaction } from "@/types/wallet";
+import DepositSuccessModal from "@/components/wallet/DepositSuccessModal";
 
 // Mock deposit packages
 const DEPOSIT_PACKAGES: DepositPackage[] = [
@@ -105,14 +106,17 @@ export default function WalletPage() {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [customAmount, setCustomAmount] = useState("");
   const [customError, setCustomError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [depositResult, setDepositResult] = useState({ amount: 0, bonus: 0, total: 0 });
 
   // Redirect if not authenticated
-  if (!isLoading && !isAuthenticated) {
-    router.push("/login");
-    return null;
-  }
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isLoading, isAuthenticated, router]);
 
-  if (isLoading) {
+  if (isLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
@@ -122,8 +126,17 @@ export default function WalletPage() {
 
   const handleDeposit = (packageId: string) => {
     setSelectedPackage(packageId);
-    setShowDepositModal(true);
-    // TODO: Implement deposit logic
+    const pkg = DEPOSIT_PACKAGES.find(p => p.id === packageId);
+    if (pkg) {
+      // Simulate successful deposit
+      const result = {
+        amount: pkg.amount,
+        bonus: pkg.bonus,
+        total: pkg.amount + pkg.bonus,
+      };
+      setDepositResult(result);
+      setShowSuccessModal(true);
+    }
   };
 
   const calculateBonus = (amount: number) => {
@@ -142,8 +155,17 @@ export default function WalletPage() {
       return;
     }
     setCustomError("");
-    // TODO: Implement custom deposit logic
-    console.log("Custom deposit:", amount, "Cá");
+    
+    // Calculate bonus and show success modal
+    const bonus = calculateBonus(amount);
+    const result = {
+      amount: amount,
+      bonus: bonus,
+      total: amount + bonus,
+    };
+    setDepositResult(result);
+    setShowSuccessModal(true);
+    setCustomAmount("");
   };
 
   const formatDate = (date: Date) => {
@@ -414,6 +436,15 @@ export default function WalletPage() {
         </div>
 
       </div>
+
+      {/* Success Modal */}
+      <DepositSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        amount={depositResult.amount}
+        bonus={depositResult.bonus}
+        total={depositResult.total}
+      />
     </main>
   );
 }

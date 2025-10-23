@@ -9,6 +9,8 @@ import FeatureProducts from "@/components/home/FeatureProducts";
 import Testimonials from "@/components/home/Testimonials";
 import FinalCTA from "@/components/home/FinalCTA";
 
+// Metadata is now handled in root layout.tsx
+
 export default function Home() {
   return (
     <main className="min-h-screen">
