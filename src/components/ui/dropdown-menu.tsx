@@ -27,7 +27,7 @@ export function DropdownMenuTrigger({ children, asChild, className }: { children
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(children, {
       onClick: () => ctx.setOpen(!ctx.open),
-    } as any);
+    } as React.HTMLAttributes<HTMLElement>);
   }
 
   return (
@@ -61,7 +61,7 @@ export function DropdownMenuGroup({ children }: { children: React.ReactNode }) {
 
 export function DropdownMenuItem({ children, onClick, className }: { children: React.ReactNode; onClick?: () => void; className?: string }) {
   const ctx = useContext(DropdownMenuCtx);
-  
+
   const handleClick = () => {
     onClick?.();
     ctx?.setOpen(false);

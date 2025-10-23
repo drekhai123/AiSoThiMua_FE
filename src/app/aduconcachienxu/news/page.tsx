@@ -425,7 +425,7 @@ export default function NewsPage() {
               <p className="text-neutral-400 mb-6">
                 Bạn có chắc chắn muốn xóa bài viết{" "}
                 <span className="text-white font-semibold">
-                  "{selectedNews.title}"
+                  &ldquo;{selectedNews.title}&rdquo;
                 </span>
                 ? Hành động này không thể hoàn tác.
               </p>

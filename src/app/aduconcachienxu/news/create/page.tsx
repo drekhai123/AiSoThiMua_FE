@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 import FullEditor from "@/components/editor/FullEditor";
@@ -23,11 +23,11 @@ interface NewsPost {
   };
 }
 
-export default function CreateNewsPage() {
+function CreateNewsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isEdit = searchParams.get("edit") === "true";
-  
+
   const [formData, setFormData] = useState<NewsPost>({
     title: "",
     excerpt: "",
@@ -80,7 +80,7 @@ export default function CreateNewsPage() {
         },
       }));
     }
-  }, [formData.title, formData.excerpt]);
+  }, [formData.title, formData.excerpt, formData.seo.metaDescription, formData.seo.metaTitle]);
 
   const categories = ["Cập nhật", "Hướng dẫn", "Khuyến mãi", "So sánh", "Thông báo"];
 
@@ -130,7 +130,7 @@ export default function CreateNewsPage() {
           {/* Basic Info */}
           <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6 space-y-6">
             <h2 className="text-xl font-semibold text-white">Thông tin cơ bản</h2>
-            
+
             {/* Title */}
             <div>
               <label className="block text-sm font-medium text-neutral-300 mb-2">
@@ -216,7 +216,7 @@ export default function CreateNewsPage() {
               <h2 className="text-xl font-semibold text-white">Cài đặt SEO</h2>
               <span className="text-xs text-neutral-500">Tối ưu hóa cho công cụ tìm kiếm</span>
             </div>
-            
+
             {/* Meta Title */}
             <div>
               <label className="block text-sm font-medium text-neutral-300 mb-2">
@@ -356,5 +356,13 @@ export default function CreateNewsPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function CreateNewsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateNewsPageContent />
+    </Suspense>
   );
 }

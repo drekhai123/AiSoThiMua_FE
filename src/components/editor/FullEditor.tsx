@@ -24,10 +24,10 @@ import { Color } from "@tiptap/extension-color";
 import { useCallback, useState, useEffect } from "react";
 
 // Icons
-import { 
-  BsTypeBold, 
-  BsTypeItalic, 
-  BsTypeUnderline, 
+import {
+  BsTypeBold,
+  BsTypeItalic,
+  BsTypeUnderline,
   BsTypeStrikethrough,
   BsListUl,
   BsListOl,
@@ -41,8 +41,8 @@ import {
   BsYoutube
 } from "react-icons/bs";
 import { FaQuoteRight, FaTiktok } from "react-icons/fa6";
-import { 
-  MdCode, 
+import {
+  MdCode,
   MdHorizontalRule,
   MdFormatColorText,
   MdFormatClear,
@@ -210,12 +210,12 @@ export default function FullEditor({
       const target = e.target as HTMLElement;
       // Match any pre element (code blocks)
       const pre = target.closest('pre');
-      
+
       if (pre && pre.querySelector('code')) {
         const rect = pre.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
         const clickY = e.clientY - rect.top;
-        
+
         // Check if clicked in copy button area (top-right corner)
         // Copy button is roughly 100px wide and 50px tall from top-right
         if (clickX > rect.width - 100 && clickY < 50) {
@@ -223,7 +223,7 @@ export default function FullEditor({
           if (code) {
             const textToCopy = code.textContent || '';
             console.log('Copying:', textToCopy.substring(0, 50) + '...'); // Debug
-            
+
             navigator.clipboard.writeText(textToCopy).then(() => {
               console.log('Copy successful!'); // Debug
               pre.classList.add('copied');
@@ -253,7 +253,7 @@ export default function FullEditor({
       });
 
       const data = await uploadResponse.json();
-      
+
       if (data.url) {
         setImageUrl(data.url);
       } else {
@@ -277,7 +277,7 @@ export default function FullEditor({
     html += `</figure>`;
 
     editor.chain().focus().insertContent(html).run();
-    
+
     // Reset and close
     setShowImageModal(false);
     setImageUrl('');
@@ -288,7 +288,7 @@ export default function FullEditor({
 
   const setLink = useCallback(() => {
     if (!editor) return;
-    
+
     const previousUrl = editor.getAttributes("link").href;
     const url = window.prompt("URL", previousUrl);
 
@@ -331,7 +331,7 @@ export default function FullEditor({
 
   const insertCodeBlock = () => {
     if (!editor) return;
-    
+
     if (codeContent) {
       editor.chain().focus().insertContent({
         type: 'codeBlock',
@@ -366,9 +366,8 @@ export default function FullEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleBold().run()}
             disabled={!editor.can().chain().focus().toggleBold().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("bold") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("bold") ? activeButton : inactiveButton
+              }`}
             title="Bold"
           >
             <BsTypeBold className="w-4 h-4" />
@@ -378,9 +377,8 @@ export default function FullEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleItalic().run()}
             disabled={!editor.can().chain().focus().toggleItalic().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("italic") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("italic") ? activeButton : inactiveButton
+              }`}
             title="Italic"
           >
             <BsTypeItalic className="w-4 h-4" />
@@ -390,9 +388,8 @@ export default function FullEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             disabled={!editor.can().chain().focus().toggleUnderline().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("underline") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("underline") ? activeButton : inactiveButton
+              }`}
             title="Underline"
           >
             <BsTypeUnderline className="w-4 h-4" />
@@ -402,9 +399,8 @@ export default function FullEditor({
             type="button"
             onClick={() => editor.chain().focus().toggleStrike().run()}
             disabled={!editor.can().chain().focus().toggleStrike().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("strike") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("strike") ? activeButton : inactiveButton
+              }`}
             title="Strikethrough"
           >
             <BsTypeStrikethrough className="w-4 h-4" />
@@ -417,10 +413,9 @@ export default function FullEditor({
             <button
               type="button"
               key={level}
-              onClick={() => editor.chain().focus().toggleHeading({ level: level as any }).run()}
-              className={`px-2 py-1 rounded ${buttonHover} transition-colors text-sm font-semibold ${
-                editor.isActive("heading", { level }) ? activeButton : inactiveButton
-              }`}
+              onClick={() => editor.chain().focus().toggleHeading({ level: level as 1 | 2 | 3 | 4 | 5 | 6 }).run()}
+              className={`px-2 py-1 rounded ${buttonHover} transition-colors text-sm font-semibold ${editor.isActive("heading", { level }) ? activeButton : inactiveButton
+                }`}
               title={`Heading ${level}`}
             >
               H{level}
@@ -433,9 +428,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("bulletList") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("bulletList") ? activeButton : inactiveButton
+              }`}
             title="Bullet List"
           >
             <BsListUl className="w-4 h-4" />
@@ -444,9 +438,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("orderedList") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("orderedList") ? activeButton : inactiveButton
+              }`}
             title="Numbered List"
           >
             <BsListOl className="w-4 h-4" />
@@ -455,9 +448,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleTaskList().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("taskList") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("taskList") ? activeButton : inactiveButton
+              }`}
             title="Task List"
           >
             <BsListCheck className="w-4 h-4" />
@@ -469,9 +461,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("left").run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive({ textAlign: "left" }) ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive({ textAlign: "left" }) ? activeButton : inactiveButton
+              }`}
             title="Align Left"
           >
             <BsTextLeft className="w-4 h-4" />
@@ -480,9 +471,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("center").run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive({ textAlign: "center" }) ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive({ textAlign: "center" }) ? activeButton : inactiveButton
+              }`}
             title="Align Center"
           >
             <BsTextCenter className="w-4 h-4" />
@@ -491,9 +481,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("right").run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive({ textAlign: "right" }) ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive({ textAlign: "right" }) ? activeButton : inactiveButton
+              }`}
             title="Align Right"
           >
             <BsTextRight className="w-4 h-4" />
@@ -505,9 +494,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("blockquote") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("blockquote") ? activeButton : inactiveButton
+              }`}
             title="Blockquote"
           >
             <FaQuoteRight className="w-4 h-4" />
@@ -517,9 +505,8 @@ export default function FullEditor({
             <button
               type="button"
               onClick={() => setShowHighlightPicker(!showHighlightPicker)}
-              className={`p-2 rounded ${buttonHover} transition-colors ${
-                editor.isActive("highlight") ? activeButton : inactiveButton
-              }`}
+              className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("highlight") ? activeButton : inactiveButton
+                }`}
               title="Highlight"
             >
               <LuHighlighter className="w-4 h-4" />
@@ -539,7 +526,7 @@ export default function FullEditor({
                           setShowHighlightPicker(false);
                         }}
                         className="w-9 h-9 rounded-full hover:scale-110 transition-transform border-2 shadow-md"
-                        style={{ 
+                        style={{
                           backgroundColor: item.color,
                           borderColor: isDark ? '#525252' : '#d4d4d4'
                         }}
@@ -570,9 +557,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={setLink}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("link") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("link") ? activeButton : inactiveButton
+              }`}
             title="Add Link"
           >
             <BsLink45Deg className="w-4 h-4" />
@@ -597,9 +583,8 @@ export default function FullEditor({
                   setShowTableModal(true);
                 }
               }}
-              className={`p-2 rounded ${buttonHover} transition-colors ${
-                editor?.isActive('table') ? activeButton : inactiveButton
-              }`}
+              className={`p-2 rounded ${buttonHover} transition-colors ${editor?.isActive('table') ? activeButton : inactiveButton
+                }`}
               title="Table"
             >
               <BsTable className="w-4 h-4" />
@@ -679,9 +664,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => setShowCodeModal(true)}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("codeBlock") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("codeBlock") ? activeButton : inactiveButton
+              }`}
             title="Code Block"
           >
             <MdCode className="w-4 h-4" />
@@ -737,9 +721,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleSubscript().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("subscript") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("subscript") ? activeButton : inactiveButton
+              }`}
             title="Subscript"
           >
             <MdSubscript className="w-4 h-4" />
@@ -748,9 +731,8 @@ export default function FullEditor({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleSuperscript().run()}
-            className={`p-2 rounded ${buttonHover} transition-colors ${
-              editor.isActive("superscript") ? activeButton : inactiveButton
-            }`}
+            className={`p-2 rounded ${buttonHover} transition-colors ${editor.isActive("superscript") ? activeButton : inactiveButton
+              }`}
             title="Superscript"
           >
             <MdSuperscript className="w-4 h-4" />
@@ -792,7 +774,7 @@ export default function FullEditor({
       )}
 
       <div className={`flex-1 overflow-y-auto ${bgColor}`} style={{ maxHeight: minHeight }}>
-        <EditorContent 
+        <EditorContent
           editor={editor}
           className={`prose ${isDark ? 'prose-invert' : ''} max-w-none px-8 py-6 focus:outline-none`}
           style={{ minHeight }}
@@ -817,7 +799,7 @@ export default function FullEditor({
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl">
             <div className={`${isDark ? 'bg-neutral-900 border-neutral-700' : 'bg-white border-neutral-300'} border-2 rounded-lg shadow-2xl p-6`}>
               <h3 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-black'}`}>Chèn Code Block</h3>
-              
+
               {/* Language Selector */}
               <div className="mb-4">
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-neutral-300' : 'text-neutral-700'}`}>
@@ -899,17 +881,16 @@ export default function FullEditor({
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-lg">
             <div className={`${isDark ? 'bg-neutral-900 border-neutral-700' : 'bg-white border-neutral-300'} border-2 rounded-lg shadow-2xl p-6`}>
               <h3 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-black'}`}>Embed Video</h3>
-              
+
               {/* Platform Toggle */}
               <div className="flex gap-2 mb-4">
                 <button
                   type="button"
                   onClick={() => setEmbedType('youtube')}
-                  className={`flex-1 px-4 py-2 rounded transition-colors flex items-center justify-center gap-2 ${
-                    embedType === 'youtube'
+                  className={`flex-1 px-4 py-2 rounded transition-colors flex items-center justify-center gap-2 ${embedType === 'youtube'
                       ? 'bg-red-600 text-white'
                       : `${isDark ? 'bg-neutral-800 text-neutral-400' : 'bg-neutral-200 text-neutral-600'}`
-                  }`}
+                    }`}
                 >
                   <BsYoutube className="w-5 h-5" />
                   YouTube
@@ -917,11 +898,10 @@ export default function FullEditor({
                 <button
                   type="button"
                   onClick={() => setEmbedType('tiktok')}
-                  className={`flex-1 px-4 py-2 rounded transition-colors flex items-center justify-center gap-2 ${
-                    embedType === 'tiktok'
+                  className={`flex-1 px-4 py-2 rounded transition-colors flex items-center justify-center gap-2 ${embedType === 'tiktok'
                       ? 'bg-black text-white'
                       : `${isDark ? 'bg-neutral-800 text-neutral-400' : 'bg-neutral-200 text-neutral-600'}`
-                  }`}
+                    }`}
                 >
                   <FaTiktok className="w-4 h-4" />
                   TikTok
@@ -968,9 +948,8 @@ export default function FullEditor({
                   type="button"
                   onClick={insertEmbed}
                   disabled={!embedUrl}
-                  className={`flex-1 px-4 py-2 rounded ${
-                    embedType === 'youtube' ? 'bg-red-600 hover:bg-red-700' : 'bg-black hover:bg-neutral-800'
-                  } text-white disabled:opacity-50 disabled:cursor-not-allowed`}
+                  className={`flex-1 px-4 py-2 rounded ${embedType === 'youtube' ? 'bg-red-600 hover:bg-red-700' : 'bg-black hover:bg-neutral-800'
+                    } text-white disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   Chèn video
                 </button>
@@ -987,7 +966,7 @@ export default function FullEditor({
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md">
             <div className={`${isDark ? 'bg-neutral-900 border-neutral-700' : 'bg-white border-neutral-300'} border-2 rounded-lg shadow-2xl p-6`}>
               <h3 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-black'}`}>Tạo bảng mới</h3>
-              
+
               {/* Row Input */}
               <div className="mb-4">
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-neutral-300' : 'text-neutral-700'}`}>
@@ -1058,28 +1037,26 @@ export default function FullEditor({
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-lg">
             <div className={`${isDark ? 'bg-neutral-900 border-neutral-700' : 'bg-white border-neutral-300'} border-2 rounded-lg shadow-2xl p-6`}>
               <h3 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-black'}`}>Thêm ảnh</h3>
-              
+
               {/* Mode Toggle */}
               <div className="flex gap-2 mb-4">
                 <button
                   type="button"
                   onClick={() => setUploadMode('upload')}
-                  className={`flex-1 px-4 py-2 rounded transition-colors ${
-                    uploadMode === 'upload'
+                  className={`flex-1 px-4 py-2 rounded transition-colors ${uploadMode === 'upload'
                       ? 'bg-blue-600 text-white'
                       : `${isDark ? 'bg-neutral-800 text-neutral-400' : 'bg-neutral-200 text-neutral-600'}`
-                  }`}
+                    }`}
                 >
                   Upload file
                 </button>
                 <button
                   type="button"
                   onClick={() => setUploadMode('url')}
-                  className={`flex-1 px-4 py-2 rounded transition-colors ${
-                    uploadMode === 'url'
+                  className={`flex-1 px-4 py-2 rounded transition-colors ${uploadMode === 'url'
                       ? 'bg-blue-600 text-white'
                       : `${isDark ? 'bg-neutral-800 text-neutral-400' : 'bg-neutral-200 text-neutral-600'}`
-                  }`}
+                    }`}
                 >
                   Nhập URL
                 </button>

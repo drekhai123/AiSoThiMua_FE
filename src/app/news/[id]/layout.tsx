@@ -1,16 +1,16 @@
 import { Metadata } from "next";
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
   children: React.ReactNode;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const newsId = params.id;
-  
+  const { id: newsId } = await params;
+
   // In production, fetch news data from API
   // const news = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/news/${newsId}`).then(res => res.json())
-  
+
   // For now, return dynamic metadata
   return {
     title: `Chi tiết tin tức | ASTM - Ai Sở Thì Mua`,
@@ -41,6 +41,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function NewsDetailLayout({ children }: Props) {
+export default async function NewsDetailLayout({ children }: Props) {
   return <>{children}</>;
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { ArrowLeft, Save, Upload } from "lucide-react";
 
 interface PricingPlan {
@@ -46,7 +47,7 @@ interface ProductForm {
 
 export default function CreateProductPage() {
   const router = useRouter();
-  
+
   const [formData, setFormData] = useState<ProductForm>({
     name: "",
     description: "",
@@ -211,7 +212,7 @@ export default function CreateProductPage() {
           {/* Basic Info */}
           <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6 space-y-6">
             <h2 className="text-xl font-semibold text-white">Thông tin cơ bản</h2>
-            
+
             {/* Name */}
             <div>
               <label className="block text-sm font-medium text-neutral-300 mb-2">
@@ -337,7 +338,7 @@ export default function CreateProductPage() {
           {/* Pricing & Stock */}
           <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6 space-y-6">
             <h2 className="text-xl font-semibold text-white">Giá & Kho hàng</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-300 mb-2">
@@ -439,7 +440,7 @@ export default function CreateProductPage() {
           {/* Logo & Image */}
           <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6 space-y-4">
             <h2 className="text-xl font-semibold text-white">Logo & Ảnh sản phẩm</h2>
-            
+
             <div>
               <label className="block text-sm font-medium text-neutral-300 mb-2">
                 URL Logo sản phẩm <span className="text-red-500">*</span>
@@ -454,7 +455,7 @@ export default function CreateProductPage() {
               />
               <p className="text-neutral-500 text-xs mt-1">Logo hiển thị trên card sản phẩm</p>
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-neutral-300 mb-2">
                 Upload ảnh hoặc nhập URL
@@ -483,10 +484,12 @@ export default function CreateProductPage() {
 
             {formData.image && (
               <div className="mt-4">
-                <img
+                <Image
                   src={formData.image}
                   alt="Preview"
-                  className="w-48 h-48 object-cover rounded-lg border border-neutral-700"
+                  width={192}
+                  height={192}
+                  className="object-cover rounded-lg border border-neutral-700"
                 />
               </div>
             )}
@@ -496,7 +499,7 @@ export default function CreateProductPage() {
           <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6 space-y-4">
             <h2 className="text-xl font-semibold text-white">Gói thời hạn (Tùy chọn)</h2>
             <p className="text-neutral-400 text-sm">Thêm các gói thời hạn khác nhau cho sản phẩm</p>
-            
+
             <div className="flex gap-2">
               <input
                 type="text"
@@ -535,7 +538,7 @@ export default function CreateProductPage() {
                   onChange={(e) => setNewPricingPlan({ ...newPricingPlan, popular: e.target.checked })}
                   className="rounded"
                 />
-                Đánh dấu gói này là "Phổ biến"
+                Đánh dấu gói này là &ldquo;Phổ biến&rdquo;
               </label>
             </div>
 
@@ -566,7 +569,7 @@ export default function CreateProductPage() {
           <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6 space-y-4">
             <h2 className="text-xl font-semibold text-white">Gói bảo hành (Tùy chọn)</h2>
             <p className="text-neutral-400 text-sm">Thêm các gói bảo hành cho sản phẩm</p>
-            
+
             <div className="flex gap-2">
               <input
                 type="text"
@@ -605,7 +608,7 @@ export default function CreateProductPage() {
                   onChange={(e) => setNewWarrantyPlan({ ...newWarrantyPlan, popular: e.target.checked })}
                   className="rounded"
                 />
-                Đánh dấu gói này là "Phổ biến"
+                Đánh dấu gói này là &ldquo;Phổ biến&rdquo;
               </label>
             </div>
 
@@ -669,7 +672,7 @@ export default function CreateProductPage() {
           {/* Features */}
           <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-6 space-y-4">
             <h2 className="text-xl font-semibold text-white">Tính năng nổi bật</h2>
-            
+
             <div className="flex gap-2">
               <input
                 type="text"

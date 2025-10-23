@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Eye, Package, CheckCircle, XCircle, X, Edit2, Mail, Phone } from "lucide-react";
+import { Search, Eye, Package, CheckCircle, XCircle, X, Edit2, Mail } from "lucide-react";
 
 interface Order {
   id: string;
@@ -143,9 +143,9 @@ export default function OrdersPage() {
 
   const handleChangeStatus = (newStatus: Order["status"]) => {
     if (!selectedOrder) return;
-    
-    setOrders(orders.map(order => 
-      order.id === selectedOrder.id 
+
+    setOrders(orders.map(order =>
+      order.id === selectedOrder.id
         ? { ...order, status: newStatus }
         : order
     ));
@@ -259,11 +259,10 @@ export default function OrdersPage() {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        order.paymentStatus === "paid"
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${order.paymentStatus === "paid"
                           ? "bg-green-500/10 text-green-500"
                           : "bg-red-500/10 text-red-500"
-                      }`}
+                        }`}
                     >
                       {order.paymentStatus === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
                     </span>
@@ -273,14 +272,14 @@ export default function OrdersPage() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
-                      <button 
+                      <button
                         onClick={() => handleViewDetail(order)}
                         className="p-2 hover:bg-neutral-800 rounded-lg transition-colors"
                         title="Xem chi tiết"
                       >
                         <Eye className="w-4 h-4 text-blue-500" />
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleUpdateStatus(order)}
                         className="p-2 hover:bg-neutral-800 rounded-lg transition-colors"
                         title="Cập nhật trạng thái"
@@ -374,11 +373,10 @@ export default function OrdersPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-neutral-400">Thanh toán</span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      selectedOrder.paymentStatus === "paid"
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${selectedOrder.paymentStatus === "paid"
                         ? "bg-green-500/10 text-green-500"
                         : "bg-red-500/10 text-red-500"
-                    }`}>
+                      }`}>
                       {selectedOrder.paymentStatus === "paid" ? "Đã thanh toán" : "Chưa thanh toán"}
                     </span>
                   </div>
@@ -393,7 +391,7 @@ export default function OrdersPage() {
 
               {/* Actions */}
               <div className="flex gap-3">
-                <button 
+                <button
                   onClick={() => {
                     setShowDetailModal(false);
                     handleUpdateStatus(selectedOrder);
@@ -424,14 +422,13 @@ export default function OrdersPage() {
             </div>
             <div className="p-6 space-y-3">
               <p className="text-sm text-neutral-400 mb-4">Chọn trạng thái mới cho đơn hàng</p>
-              
+
               <button
                 onClick={() => handleChangeStatus("pending")}
-                className={`w-full px-4 py-3 rounded-lg text-left flex items-center gap-3 transition-colors ${
-                  selectedOrder.status === "pending" 
-                    ? "bg-orange-500/20 border-2 border-orange-500" 
+                className={`w-full px-4 py-3 rounded-lg text-left flex items-center gap-3 transition-colors ${selectedOrder.status === "pending"
+                    ? "bg-orange-500/20 border-2 border-orange-500"
                     : "bg-neutral-800 hover:bg-neutral-700 border-2 border-transparent"
-                }`}
+                  }`}
               >
                 <Package className="w-5 h-5 text-orange-500" />
                 <div>
@@ -442,11 +439,10 @@ export default function OrdersPage() {
 
               <button
                 onClick={() => handleChangeStatus("processing")}
-                className={`w-full px-4 py-3 rounded-lg text-left flex items-center gap-3 transition-colors ${
-                  selectedOrder.status === "processing" 
-                    ? "bg-yellow-500/20 border-2 border-yellow-500" 
+                className={`w-full px-4 py-3 rounded-lg text-left flex items-center gap-3 transition-colors ${selectedOrder.status === "processing"
+                    ? "bg-yellow-500/20 border-2 border-yellow-500"
                     : "bg-neutral-800 hover:bg-neutral-700 border-2 border-transparent"
-                }`}
+                  }`}
               >
                 <Package className="w-5 h-5 text-yellow-500" />
                 <div>
@@ -457,11 +453,10 @@ export default function OrdersPage() {
 
               <button
                 onClick={() => handleChangeStatus("completed")}
-                className={`w-full px-4 py-3 rounded-lg text-left flex items-center gap-3 transition-colors ${
-                  selectedOrder.status === "completed" 
-                    ? "bg-green-500/20 border-2 border-green-500" 
+                className={`w-full px-4 py-3 rounded-lg text-left flex items-center gap-3 transition-colors ${selectedOrder.status === "completed"
+                    ? "bg-green-500/20 border-2 border-green-500"
                     : "bg-neutral-800 hover:bg-neutral-700 border-2 border-transparent"
-                }`}
+                  }`}
               >
                 <CheckCircle className="w-5 h-5 text-green-500" />
                 <div>
@@ -472,11 +467,10 @@ export default function OrdersPage() {
 
               <button
                 onClick={() => handleChangeStatus("cancelled")}
-                className={`w-full px-4 py-3 rounded-lg text-left flex items-center gap-3 transition-colors ${
-                  selectedOrder.status === "cancelled" 
-                    ? "bg-red-500/20 border-2 border-red-500" 
+                className={`w-full px-4 py-3 rounded-lg text-left flex items-center gap-3 transition-colors ${selectedOrder.status === "cancelled"
+                    ? "bg-red-500/20 border-2 border-red-500"
                     : "bg-neutral-800 hover:bg-neutral-700 border-2 border-transparent"
-                }`}
+                  }`}
               >
                 <XCircle className="w-5 h-5 text-red-500" />
                 <div>

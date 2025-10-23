@@ -1,5 +1,17 @@
 import { MetadataRoute } from "next";
 
+interface Product {
+  id: string;
+  updated_at?: string;
+  created_at: string;
+}
+
+interface NewsItem {
+  id: string;
+  updated_at?: string;
+  created_at: string;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://aisothimua.com";
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -45,7 +57,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
     const products = productsRes.ok ? await productsRes.json() : [];
 
-    const productPages: MetadataRoute.Sitemap = products.map((product: any) => ({
+    const productPages: MetadataRoute.Sitemap = products.map((product: Product) => ({
       url: `${baseUrl}/products/${product.id}`,
       lastModified: new Date(product.updated_at || product.created_at),
       changeFrequency: "weekly",
@@ -58,7 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
     const news = newsRes.ok ? await newsRes.json() : [];
 
-    const newsPages: MetadataRoute.Sitemap = news.map((item: any) => ({
+    const newsPages: MetadataRoute.Sitemap = news.map((item: NewsItem) => ({
       url: `${baseUrl}/news/${item.id}`,
       lastModified: new Date(item.updated_at || item.created_at),
       changeFrequency: "weekly",

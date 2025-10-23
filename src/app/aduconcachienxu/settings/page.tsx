@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Save, Bell, Lock, Globe, Mail, Shield } from "lucide-react";
+import { Save, Bell, Globe, Shield } from "lucide-react";
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({
@@ -100,16 +100,14 @@ export default function SettingsPage() {
                   notificationsEnabled: !settings.notificationsEnabled,
                 })
               }
-              className={`relative w-12 h-6 rounded-full transition-colors ${
-                settings.notificationsEnabled ? "bg-blue-600" : "bg-neutral-700"
-              }`}
+              className={`relative w-12 h-6 rounded-full transition-colors ${settings.notificationsEnabled ? "bg-blue-600" : "bg-neutral-700"
+                }`}
             >
               <div
-                className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                  settings.notificationsEnabled
+                className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${settings.notificationsEnabled
                     ? "translate-x-7"
                     : "translate-x-1"
-                }`}
+                  }`}
               />
             </button>
           </div>
@@ -128,16 +126,14 @@ export default function SettingsPage() {
                   emailNotifications: !settings.emailNotifications,
                 })
               }
-              className={`relative w-12 h-6 rounded-full transition-colors ${
-                settings.emailNotifications ? "bg-blue-600" : "bg-neutral-700"
-              }`}
+              className={`relative w-12 h-6 rounded-full transition-colors ${settings.emailNotifications ? "bg-blue-600" : "bg-neutral-700"
+                }`}
             >
               <div
-                className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                  settings.emailNotifications
+                className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${settings.emailNotifications
                     ? "translate-x-7"
                     : "translate-x-1"
-                }`}
+                  }`}
               />
             </button>
           </div>
@@ -166,14 +162,12 @@ export default function SettingsPage() {
                   twoFactorAuth: !settings.twoFactorAuth,
                 })
               }
-              className={`relative w-12 h-6 rounded-full transition-colors ${
-                settings.twoFactorAuth ? "bg-blue-600" : "bg-neutral-700"
-              }`}
+              className={`relative w-12 h-6 rounded-full transition-colors ${settings.twoFactorAuth ? "bg-blue-600" : "bg-neutral-700"
+                }`}
             >
               <div
-                className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                  settings.twoFactorAuth ? "translate-x-7" : "translate-x-1"
-                }`}
+                className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${settings.twoFactorAuth ? "translate-x-7" : "translate-x-1"
+                  }`}
               />
             </button>
           </div>
@@ -192,14 +186,12 @@ export default function SettingsPage() {
                   maintenanceMode: !settings.maintenanceMode,
                 })
               }
-              className={`relative w-12 h-6 rounded-full transition-colors ${
-                settings.maintenanceMode ? "bg-red-600" : "bg-neutral-700"
-              }`}
+              className={`relative w-12 h-6 rounded-full transition-colors ${settings.maintenanceMode ? "bg-red-600" : "bg-neutral-700"
+                }`}
             >
               <div
-                className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                  settings.maintenanceMode ? "translate-x-7" : "translate-x-1"
-                }`}
+                className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${settings.maintenanceMode ? "translate-x-7" : "translate-x-1"
+                  }`}
               />
             </button>
           </div>

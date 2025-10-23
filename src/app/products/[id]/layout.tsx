@@ -4,23 +4,23 @@ import { Metadata } from "next";
 // In a real scenario, you'd use generateMetadata async function
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
   children: React.ReactNode;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const productId = params.id;
-  
+  const { id: productId } = await params;
+
   // In production, fetch product data from API
   // const product = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`).then(res => res.json())
-  
+
   // For now, return dynamic metadata based on ID
   return {
     title: `Chi tiết sản phẩm | ASTM - Ai Sở Thì Mua`,
     description: `Xem chi tiết thông tin, giá cả và đánh giá sản phẩm tại ASTM. Mua tài khoản AI Tools giá rẻ, uy tín, giao hàng nhanh chóng.`,
     keywords: "ai tools, chatgpt, midjourney, mua tai khoan ai, gia re",
     openGraph: {
-      type: "product",
+      type: "website",
       title: `Chi tiết sản phẩm | ASTM`,
       description: `Xem chi tiết thông tin, giá cả và đánh giá sản phẩm tại ASTM`,
       images: [
@@ -44,6 +44,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ProductDetailLayout({ children }: Props) {
+export default async function ProductDetailLayout({ children }: Props) {
   return <>{children}</>;
 }

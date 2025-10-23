@@ -2,36 +2,36 @@
 
 import React, { createContext, useContext, useMemo, useState } from "react";
 
-interface SelectContextValue<T = any> {
-  value: T | undefined;
-  setValue: (v: T) => void;
+interface SelectContextValue {
+  value: unknown;
+  setValue: (v: unknown) => void;
   open: boolean;
   setOpen: (o: boolean) => void;
-  onValueChange?: (v: T) => void;
+  onValueChange?: (v: unknown) => void;
 }
 
 const SelectCtx = createContext<SelectContextValue | null>(null);
 
-interface SelectProps<T = any> {
+interface SelectProps<T = unknown> {
   value?: T;
   onValueChange?: (v: T) => void;
   children: React.ReactNode;
 }
 
-export function Select<T = any>({ value, onValueChange, children }: SelectProps<T>) {
+export function Select<T = unknown>({ value, onValueChange, children }: SelectProps<T>) {
   const [internalValue, setInternalValue] = useState<T | undefined>(value);
   const [open, setOpen] = useState(false);
 
   const ctx = useMemo(
     () => ({
       value: value ?? internalValue,
-      setValue: (v: any) => {
-        setInternalValue(v);
-        onValueChange?.(v);
+      setValue: (v: unknown) => {
+        setInternalValue(v as T);
+        onValueChange?.(v as T);
       },
       open,
       setOpen,
-      onValueChange,
+      onValueChange: onValueChange as (v: unknown) => void,
     }),
     [value, internalValue, open, onValueChange]
   );
@@ -63,7 +63,7 @@ export function SelectTrigger({ children, className, ...props }: React.HTMLAttri
 export function SelectValue({ placeholder, className }: { placeholder?: string; className?: string }) {
   const ctx = useContext(SelectCtx);
   if (!ctx) return null;
-  return <span className={className}>{(ctx.value as any) ?? placeholder ?? ""}</span>;
+  return <span className={className}>{String(ctx.value) ?? placeholder ?? ""}</span>;
 }
 
 export function SelectContent({ children, className }: { children: React.ReactNode; className?: string }) {
@@ -79,7 +79,7 @@ export function SelectContent({ children, className }: { children: React.ReactNo
   );
 }
 
-export function SelectItem({ value, children, className }: { value: any; children: React.ReactNode; className?: string }) {
+export function SelectItem({ value, children, className }: { value: unknown; children: React.ReactNode; className?: string }) {
   const ctx = useContext(SelectCtx);
   if (!ctx) return null;
   const isSelected = ctx.value === value;

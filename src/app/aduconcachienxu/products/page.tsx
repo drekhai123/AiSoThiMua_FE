@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Plus, Edit2, Trash2, Eye, Package } from "lucide-react";
+import Image from "next/image";
+import { Search, Plus, Edit2, Trash2, Package } from "lucide-react";
 
 interface Product {
   id: string;
@@ -77,9 +78,9 @@ export default function ProductsPage() {
       products.map((p) =>
         p.id === productId
           ? {
-              ...p,
-              status: p.status === "active" ? "inactive" : "active",
-            }
+            ...p,
+            status: p.status === "active" ? "inactive" : "active",
+          }
           : p
       )
     );
@@ -148,17 +149,17 @@ export default function ProductsPage() {
           >
             {/* Product Image */}
             <div className="relative aspect-square bg-neutral-800">
-              <img
+              <Image
                 src={product.image}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
               <span
-                className={`absolute top-2 right-2 px-2 py-1 text-xs font-medium rounded ${
-                  product.status === "active"
-                    ? "bg-green-500/10 text-green-500"
-                    : "bg-red-500/10 text-red-500"
-                }`}
+                className={`absolute top-2 right-2 px-2 py-1 text-xs font-medium rounded ${product.status === "active"
+                  ? "bg-green-500/10 text-green-500"
+                  : "bg-red-500/10 text-red-500"
+                  }`}
               >
                 {product.status === "active" ? "Đang bán" : "Ngừng bán"}
               </span>
@@ -249,7 +250,7 @@ export default function ProductsPage() {
               <p className="text-neutral-400 mb-6">
                 Bạn có chắc chắn muốn xóa sản phẩm{" "}
                 <span className="text-white font-semibold">
-                  "{selectedProduct.name}"
+                  &ldquo;{selectedProduct.name}&rdquo;
                 </span>
                 ? Hành động này không thể hoàn tác.
               </p>
