@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 import ImageUpload from "@/components/ui/image-upload";
+import { updateAvatar, getProfile, updateFullName, changePassword } from "@/services/auth";
 import {
   User,
   Mail,
@@ -27,7 +28,7 @@ import {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, refreshUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -38,6 +39,10 @@ export default function ProfilePage() {
     email: "",
   });
   const [avatarUrl, setAvatarUrl] = useState<string>("/team/member.png");
+  const [avatarKey, setAvatarKey] = useState(Date.now()); // Force image refresh
+  const [isUpdatingAvatar, setIsUpdatingAvatar] = useState(false);
+  const [isFetchingProfile, setIsFetchingProfile] = useState(false);
+  const [toast, setToast] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
   // Mock statistics
   const stats = {
@@ -64,23 +69,69 @@ export default function ProfilePage() {
     },
   ];
 
+  // Fetch fresh user profile from API
+  const fetchUserProfile = async () => {
+    try {
+      setIsFetchingProfile(true);
+      const response = await getProfile();
+
+      if (response.isSuccess && response.data) {
+        console.log("Fetched fresh profile data:", response.data);
+
+        // Update localStorage with fresh data
+        if (typeof window !== "undefined") {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
+
+        // Refresh user context
+        refreshUser();
+      }
+    } catch (error) {
+      console.error("Failed to fetch profile:", error);
+    } finally {
+      setIsFetchingProfile(false);
+    }
+  };
+
+  // Fetch profile on mount
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      fetchUserProfile();
+    }
+  }, [isAuthenticated, isLoading]);
+
   useEffect(() => {
     if (user) {
+      console.log("User context updated:", user);
+      console.log("User avatar from context:", user.avatar);
+
       setFormData({
         fullName: user.fullName,
         phone: user.phone || "",
         email: user.email,
       });
-      // Set default avatar if user has one
-      setAvatarUrl(user.avatar || "/team/member.png");
+      // Always use avatar from user context (will be updated from API response)
+      // Use user.avatar if it exists, otherwise use fallback
+      let userAvatar = user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`;
+
+      // Add cache busting timestamp to force image refresh
+      if (userAvatar && !userAvatar.includes('dicebear.com')) {
+        const separator = userAvatar.includes('?') ? '&' : '?';
+        userAvatar = `${userAvatar}${separator}t=${Date.now()}`;
+      }
+
+      console.log("Setting avatarUrl to:", userAvatar);
+      setAvatarUrl(userAvatar);
+      setAvatarKey(Date.now()); // Force image refresh when user changes
     }
   }, [user]);
 
   // Redirect if not authenticated
-  if (!isLoading && !isAuthenticated) {
-    router.push("/login");
-    return null;
-  }
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isLoading, isAuthenticated, router]);
 
   if (isLoading) {
     return (
@@ -90,10 +141,36 @@ export default function ProfilePage() {
     );
   }
 
-  const handleSave = () => {
-    // TODO: Implement update user info
-    console.log("Save user data:", { ...formData, avatar: avatarUrl });
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      setIsUpdatingAvatar(true); // Reuse loading state
+
+      // Update full name if changed
+      if (formData.fullName !== user?.fullName) {
+        console.log("Updating full name to:", formData.fullName);
+        const response = await updateFullName({ fullName: formData.fullName });
+
+        if (!response.isSuccess) {
+          throw new Error(response.message || "Cập nhật tên thất bại");
+        }
+
+        // Fetch fresh profile data from server
+        await fetchUserProfile();
+
+        // Show success toast
+        setToast({ type: 'success', message: 'Cập nhật thông tin thành công!' });
+        setTimeout(() => setToast(null), 3000);
+      }
+
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      const errorMessage = error instanceof Error ? error.message : 'Cập nhật thông tin thất bại!';
+      setToast({ type: 'error', message: errorMessage });
+      setTimeout(() => setToast(null), 3000);
+    } finally {
+      setIsUpdatingAvatar(false);
+    }
   };
 
   const handleAvatarUpload = (url: string) => {
@@ -106,12 +183,51 @@ export default function ProfilePage() {
     // TODO: Show error toast
   };
 
-  const handleSaveAvatar = () => {
-    if (tempAvatarUrl) {
-      setAvatarUrl(tempAvatarUrl);
+  const handleSaveAvatar = async () => {
+    if (!tempAvatarUrl) return;
+
+    setIsUpdatingAvatar(true);
+    try {
+      console.log("Updating avatar with URL:", tempAvatarUrl);
+
+      // Call API to update avatar
+      const response = await updateAvatar({ avatar: tempAvatarUrl });
+
+      console.log("Update avatar response:", response);
+
+      if (!response || !response.isSuccess) {
+        throw new Error(response?.message || "Cập nhật avatar thất bại");
+      }
+
+      // Close modal first
       setShowAvatarModal(false);
       setTempAvatarUrl("");
-      // TODO: Save avatar URL to user profile
+
+      console.log("Avatar update response:", response);
+
+      // Fetch fresh profile data from server
+      await fetchUserProfile();
+
+      // Force image refresh
+      setAvatarKey(Date.now());
+
+      // Show success toast
+      setToast({ type: 'success', message: 'Cập nhật avatar thành công!' });
+      setTimeout(() => setToast(null), 3000);
+
+      console.log("Avatar updated successfully");
+    } catch (error) {
+      console.error("Failed to update avatar - Full error:", error);
+      if (error instanceof Error) {
+        console.error("Error details:", error.message);
+      }
+
+      // Show error toast
+      const errorMessage = error instanceof Error ? error.message : 'Cập nhật avatar thất bại!';
+      setToast({ type: 'error', message: errorMessage });
+      setTimeout(() => setToast(null), 3000);
+    } finally {
+      setIsUpdatingAvatar(false);
     }
   };
 
@@ -161,6 +277,21 @@ export default function ProfilePage() {
 
   return (
     <main className="min-h-screen py-20 bg-gradient-to-b from-slate-950 to-slate-900">
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 transition-all duration-300 ease-in-out ${toast.type === 'success'
+          ? 'bg-green-500 text-white'
+          : 'bg-red-500 text-white'
+          }`}>
+          {toast.type === 'success' ? (
+            <CheckCircle className="w-5 h-5" />
+          ) : (
+            <AlertCircle className="w-5 h-5" />
+          )}
+          <span className="font-medium">{toast.message}</span>
+        </div>
+      )}
+
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Page Header */}
         <div className="mb-8">
@@ -194,10 +325,20 @@ export default function ProfilePage() {
                   <div className="flex gap-2">
                     <button
                       onClick={handleSave}
-                      className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all"
+                      disabled={isUpdatingAvatar}
+                      className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <Save className="w-4 h-4" />
-                      Lưu
+                      {isUpdatingAvatar ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Đang lưu...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-4 h-4" />
+                          Lưu
+                        </>
+                      )}
                     </button>
                     <button
                       onClick={handleCancel}
@@ -215,11 +356,13 @@ export default function ProfilePage() {
                 <div className="flex-shrink-0">
                   <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg shadow-purple-500/30">
                     <Image
+                      key={avatarKey}
                       src={typeof avatarUrl === 'string' && avatarUrl ? avatarUrl : "/team/member.png"}
                       alt={user?.fullName || "User"}
                       fill
                       sizes="128px"
                       className="object-cover"
+                      unoptimized
                     />
                   </div>
                   <button
@@ -508,11 +651,13 @@ export default function ProfilePage() {
                     <p className="text-gray-400 text-sm mb-3">Ảnh hiện tại:</p>
                     <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-gray-600 shadow-lg">
                       <Image
+                        key={avatarKey}
                         src={typeof avatarUrl === 'string' && avatarUrl ? avatarUrl : "/team/member.png"}
                         alt="Current Avatar"
                         fill
                         sizes="80px"
                         className="object-cover"
+                        unoptimized
                       />
                     </div>
                   </div>
@@ -574,10 +719,17 @@ export default function ProfilePage() {
                   </button>
                   <button
                     onClick={handleSaveAvatar}
-                    disabled={!tempAvatarUrl}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!tempAvatarUrl || isUpdatingAvatar}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    Lưu
+                    {isUpdatingAvatar ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Đang lưu...
+                      </>
+                    ) : (
+                      "Lưu"
+                    )}
                   </button>
                 </div>
               </div>
@@ -679,16 +831,24 @@ function ChangePasswordModal({ onClose }: ChangePasswordModalProps) {
     setIsLoading(true);
 
     try {
-      // TODO: Implement API call
-      console.log("Changing password:", formData);
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Call change password API
+      const response = await changePassword({
+        currentPassword: formData.currentPassword,
+        newPassword: formData.newPassword,
+        confirmNewPassword: formData.confirmPassword,
+      });
+
+      if (!response.isSuccess) {
+        throw new Error(response.message || "Đổi mật khẩu thất bại");
+      }
 
       setSuccess(true);
       setTimeout(() => {
         onClose();
       }, 2000);
     } catch (error) {
-      setErrors({ currentPassword: "Mật khẩu hiện tại không đúng" });
+      const errorMessage = error instanceof Error ? error.message : "Mật khẩu hiện tại không đúng";
+      setErrors({ currentPassword: errorMessage });
     } finally {
       setIsLoading(false);
     }

@@ -6,6 +6,7 @@ import Footer from "@/components/layouts/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import LoadingProvider from "@/components/providers/LoadingProvider";
+import QueryProvider from "@/components/providers/QueryProvider";
 import ChatWidget from "@/components/ui/ChatWidget";
 
 export default function LayoutProvider({
@@ -21,15 +22,17 @@ export default function LayoutProvider({
     || pathname === "/forgot-password" || pathname === "/two-factor" || pathname === "/change-password" || pathname?.startsWith("/aduconcachienxu");
 
   return (
-    <LoadingProvider>
-      <AuthProvider>
-        <CartProvider>
-          {!hideLayout && <Navbar />}
-          {children}
-          {!hideLayout && <Footer />}
-          {!hideLayout && <ChatWidget />}
-        </CartProvider>
-      </AuthProvider>
-    </LoadingProvider>
+    <QueryProvider>
+      <LoadingProvider>
+        <AuthProvider>
+          <CartProvider>
+            {!hideLayout && <Navbar />}
+            {children}
+            {!hideLayout && <Footer />}
+            {!hideLayout && <ChatWidget />}
+          </CartProvider>
+        </AuthProvider>
+      </LoadingProvider>
+    </QueryProvider>
   );
 }

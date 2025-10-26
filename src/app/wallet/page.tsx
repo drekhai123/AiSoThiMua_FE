@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Wallet, Plus, TrendingUp, History, CreditCard, Gift } from "lucide-react";
 import { DepositPackage, Transaction } from "@/types/wallet";
@@ -99,8 +99,9 @@ const TRANSACTION_ICONS = {
   bonus: { icon: Gift, color: "text-yellow-400", bg: "bg-yellow-500/10" },
 };
 
-export default function WalletPage() {
+function WalletPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, isAuthenticated, isLoading } = useAuth();
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -116,6 +117,47 @@ export default function WalletPage() {
     }
   }, [isLoading, isAuthenticated, router]);
 
+  // Handle payment callback from Sepay
+  useEffect(() => {
+    const paymentStatus = searchParams.get("payment_status");
+    const amount = searchParams.get("amount");
+    const transactionId = searchParams.get("transaction_id");
+
+    if (paymentStatus) {
+      if (paymentStatus === "success" || paymentStatus === "200") {
+        // Validate amount before processing
+        const amountFloat = amount ? parseFloat(amount) : NaN;
+
+        if (!amount || !Number.isFinite(amountFloat) || amountFloat <= 0) {
+          console.error("Invalid amount in payment callback:", amount);
+          setCustomError("Giao dịch thất bại do dữ liệu không hợp lệ. Vui lòng liên hệ hỗ trợ.");
+          setDepositResult({ amount: 0, bonus: 0, total: 0 });
+          setShowSuccessModal(false);
+          router.replace("/wallet");
+          return;
+        }
+
+        // Show success modal with deposit result
+        const depositAmount = amountFloat / 1000; // Convert VND to Cá
+        const bonus = calculateBonus(depositAmount);
+        setDepositResult({
+          amount: depositAmount,
+          bonus: bonus,
+          total: depositAmount + bonus,
+        });
+        setShowSuccessModal(true);
+        // Clear URL params
+        router.replace("/wallet");
+      } else if (paymentStatus === "cancel") {
+        setCustomError("Bạn đã hủy giao dịch thanh toán.");
+        router.replace("/wallet");
+      } else {
+        setCustomError("Giao dịch thanh toán thất bại. Vui lòng thử lại.");
+        router.replace("/wallet");
+      }
+    }
+  }, [searchParams, router]);
+
   if (isLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -124,18 +166,40 @@ export default function WalletPage() {
     );
   }
 
-  const handleDeposit = (packageId: string) => {
+  const handleDeposit = async (packageId: string) => {
     setSelectedPackage(packageId);
     const pkg = DEPOSIT_PACKAGES.find(p => p.id === packageId);
     if (pkg) {
-      // Simulate successful deposit
-      const result = {
-        amount: pkg.amount,
-        bonus: pkg.bonus,
-        total: pkg.amount + pkg.bonus,
-      };
-      setDepositResult(result);
-      setShowSuccessModal(true);
+      try {
+        // TODO: Replace with actual Sepay payment gateway integration
+        // Example: Create payment order with Sepay API
+        // const response = await fetch('/api/sepay/create-payment', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({
+        //     amount: pkg.amountVND,
+        //     amountCrypto: pkg.amount,
+        //     bonus: pkg.bonus,
+        //     user_id: user?.id,
+        //   }),
+        // });
+        // const { payment_url } = await response.json();
+        // window.location.href = payment_url;
+
+        // For now, simulate successful deposit
+        const result = {
+          amount: pkg.amount,
+          bonus: pkg.bonus,
+          total: pkg.amount + pkg.bonus,
+        };
+        setDepositResult(result);
+        setShowSuccessModal(true);
+      } catch (error) {
+        console.error("Deposit error:", error);
+        setCustomError("Nạp tiền thất bại. Vui lòng thử lại.");
+        setDepositResult({ amount: 0, bonus: 0, total: 0 });
+        setShowSuccessModal(false);
+      }
     }
   };
 
@@ -148,24 +212,44 @@ export default function WalletPage() {
     return 0;
   };
 
-  const handleCustomDeposit = () => {
+  const handleCustomDeposit = async () => {
     const amount = parseFloat(customAmount);
     if (isNaN(amount) || amount < 20) {
       setCustomError("Số tiền tối thiểu là 20 Cá (20,000 VNĐ)");
       return;
     }
     setCustomError("");
-    
-    // Calculate bonus and show success modal
-    const bonus = calculateBonus(amount);
-    const result = {
-      amount: amount,
-      bonus: bonus,
-      total: amount + bonus,
-    };
-    setDepositResult(result);
-    setShowSuccessModal(true);
-    setCustomAmount("");
+
+    try {
+      // TODO: Replace with actual Sepay payment gateway integration
+      // const amountVND = amount * 1000;
+      // const response = await fetch('/api/sepay/create-payment', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
+      //     amount: amountVND,
+      //     amountCrypto: amount,
+      //     bonus: calculateBonus(amount),
+      //     user_id: user?.id,
+      //   }),
+      // });
+      // const { payment_url } = await response.json();
+      // window.location.href = payment_url;
+
+      // For now, calculate bonus and show success modal
+      const bonus = calculateBonus(amount);
+      const result = {
+        amount: amount,
+        bonus: bonus,
+        total: amount + bonus,
+      };
+      setDepositResult(result);
+      setShowSuccessModal(true);
+      setCustomAmount("");
+    } catch (error) {
+      console.error("Custom deposit error:", error);
+      setCustomError("Có lỗi xảy ra. Vui lòng thử lại.");
+    }
   };
 
   const formatDate = (date: Date) => {
@@ -446,6 +530,18 @@ export default function WalletPage() {
         total={depositResult.total}
       />
     </main>
+  );
+}
+
+export default function WalletPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-950 to-slate-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      </div>
+    }>
+      <WalletPageContent />
+    </Suspense>
   );
 }
 

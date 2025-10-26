@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // Fetch products
-    const productsRes = await fetch(`${apiUrl}/api/products/`, {
+    const productsRes = await fetch(`${apiUrl}/products/`, {
       next: { revalidate: 3600 }, // Revalidate every hour
     });
     const products = productsRes.ok ? await productsRes.json() : [];
@@ -65,7 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     // Fetch news
-    const newsRes = await fetch(`${apiUrl}/api/news/`, {
+    const newsRes = await fetch(`${apiUrl}/news/`, {
       next: { revalidate: 3600 },
     });
     const news = newsRes.ok ? await newsRes.json() : [];

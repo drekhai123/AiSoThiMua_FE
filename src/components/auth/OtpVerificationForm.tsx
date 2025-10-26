@@ -4,28 +4,34 @@ import { useState, useRef, KeyboardEvent, ClipboardEvent, useEffect } from "reac
 import Link from "next/link";
 import { ArrowLeft, Mail, ShieldCheck } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { verifyOtp, resendOtp } from "@/services/auth";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function OtpVerificationForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { refreshUser } = useAuth();
   const [email, setEmail] = useState<string | null>(null);
   const [type, setType] = useState<"register" | "reset">("register");
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // Check if user came from registration or forgot password
   useEffect(() => {
     const emailParam = searchParams.get("email");
     const typeParam = searchParams.get("type") as "register" | "reset" | null;
-    
+
     if (!emailParam) {
       // No email parameter, redirect to register
       router.replace("/register");
       return;
     }
-    
+
     setEmail(emailParam);
     setType(typeParam || "register");
   }, [searchParams, router]);
@@ -57,7 +63,7 @@ export default function OtpVerificationForm() {
   const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text").slice(0, 6);
-    
+
     if (!/^\d+$/.test(pastedData)) return;
 
     const newOtp = [...otp];
@@ -76,38 +82,82 @@ export default function OtpVerificationForm() {
   // Handle submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const otpValue = otp.join("");
-    
+
     if (otpValue.length !== 6) {
       setError("Vui lòng nhập đầy đủ 6 số");
       return;
     }
-    
-    setIsLoading(true);
-    
-    // TODO: Implement OTP verification logic here
-    console.log("OTP:", otpValue, "Email:", email, "Type:", type);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      if (type === "reset") {
-        // Redirect to reset password page
-        router.push(`/reset-password?email=${encodeURIComponent(email!)}&token=${otpValue}`);
-      } else {
-        // Redirect to login after successful registration verification
-        router.push("/login");
-      }
-    }, 1500);
-  };
 
+    if (!email) {
+      setError("Email không hợp lệ");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+    setSuccessMessage("");
+
+    try {
+      if (type === "reset") {
+        // For password reset, just redirect with OTP token
+        sessionStorage.setItem("resetToken", otpValue);
+        sessionStorage.setItem("resetEmail", email);
+        router.push("/reset-password");
+      } else {
+        // For registration, verify OTP
+        const response = await verifyOtp({
+          email,
+          otp: otpValue,
+        });
+
+        if (!response.isSuccess) {
+          throw new Error(response.message || "Mã OTP không đúng hoặc đã hết hạn");
+        }
+
+        // Show success message
+        setSuccessMessage(response.data.message || response.message || "Xác thực email thành công! Đang chuyển đến trang đăng nhập...");
+
+        // Redirect to login page after successful verification
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Mã OTP không đúng hoặc đã hết hạn";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   // Resend OTP
   const handleResendOtp = async () => {
+    if (!email) return;
+
+    setResendLoading(true);
     setError("");
-    // TODO: Implement resend OTP logic
-    console.log("Resending OTP to:", email);
+    setResendSuccess(false);
+
+    try {
+      const response = await resendOtp({ email });
+
+      if (!response.isSuccess) {
+        throw new Error(response.message || "Gữi lại OTP thất bại");
+      }
+
+      setResendSuccess(true);
+
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setResendSuccess(false);
+      }, 3000);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Không thể gửi lại OTP. Vui lòng thử lại sau.";
+      setError(errorMessage);
+    } finally {
+      setResendLoading(false);
+    }
   };
 
   // Don't render until we verify email exists
@@ -135,7 +185,7 @@ export default function OtpVerificationForm() {
         </div>
         <span className="font-medium">Quay lại</span>
       </Link>
-      
+
       {/* Card Container */}
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-xl p-8 space-y-6">
         {/* Icon */}
@@ -185,15 +235,26 @@ export default function OtpVerificationForm() {
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 onPaste={handlePaste}
-                className={`w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${
-                  error
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-purple-600 focus:ring-purple-500 focus:border-transparent"
-                } bg-slate-700/50 text-white`}
+                className={`w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 transition-all duration-200 ${error
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-purple-600 focus:ring-purple-500 focus:border-transparent"
+                  } bg-slate-700/50 text-white`}
                 suppressHydrationWarning
               />
             ))}
           </div>
+
+          {/* Success Message */}
+          {successMessage && (
+            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-5 h-5 text-green-400">✅</div>
+                <p className="text-green-300 text-sm font-semibold">
+                  {successMessage}
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Error Message */}
           {error && (
@@ -203,7 +264,7 @@ export default function OtpVerificationForm() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || !!successMessage}
             className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
@@ -214,6 +275,8 @@ export default function OtpVerificationForm() {
                 </svg>
                 Đang xác thực...
               </div>
+            ) : successMessage ? (
+              "Đang chuyển hướng..."
             ) : (
               "Xác thực"
             )}
@@ -221,21 +284,27 @@ export default function OtpVerificationForm() {
         </form>
 
         {/* Resend OTP */}
-        <div className="text-center text-sm">
-          <span className="text-gray-400">Không nhận được mã? </span>
-          <button
-            type="button"
-            onClick={handleResendOtp}
-            className="font-medium bg-gradient-to-r from-purple-500 to-blue-600 bg-clip-text text-transparent hover:from-purple-800 hover:to-blue-700 transition-colors"
-          >
-            Gửi lại
-          </button>
+        <div className="text-center text-sm space-y-2">
+          {resendSuccess && (
+            <p className="text-green-400">✓ Mã OTP đã được gửi lại!</p>
+          )}
+          <div>
+            <span className="text-gray-400">Không nhận được mã? </span>
+            <button
+              type="button"
+              onClick={handleResendOtp}
+              disabled={resendLoading}
+              className="font-medium bg-gradient-to-r from-purple-500 to-blue-600 bg-clip-text text-transparent hover:from-purple-800 hover:to-blue-700 transition-colors disabled:opacity-50"
+            >
+              {resendLoading ? "Đang gửi..." : "Gửi lại"}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Footer Text */}
       <p className="mt-6 text-center text-xs text-gray-500">
-        Mã OTP có hiệu lực trong 5 phút
+        Mã OTP có hiệu lực trong 15 phút
       </p>
     </div>
   );
