@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CldImage } from "next-cloudinary";
 import { usePathname, useRouter } from "next/navigation";
-import { User, LogOut, Settings, ShoppingBag, Heart, ChevronDown, Bell, ShoppingCart, Trash2, Plus, Minus, FileText } from "lucide-react";
+import { User, LogOut, Settings, ShoppingBag, Heart, ChevronDown, Bell, ShoppingCart, Trash2, Plus, Minus, FileText, Menu, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 
@@ -52,6 +52,7 @@ export default function Navbar() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const notificationRef = useRef<HTMLDivElement>(null);
@@ -179,8 +180,16 @@ export default function Navbar() {
                     </Link>
                 </div>
 
+                {/* Mobile Menu Button */}
+                <button
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-all"
+                >
+                    {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </button>
+
                 {/* Auth Buttons / User Profile */}
-                <div className="flex items-center space-x-3 ml-4">
+                <div className="hidden md:flex items-center space-x-3 ml-4">
                     {isAuthenticated && user ? (
                         <>
                             {/* Shopping Cart */}
@@ -536,6 +545,157 @@ export default function Navbar() {
                     )}
                 </div>
             </div>
+
+            {/* Mobile Menu Dropdown */}
+            {isMobileMenuOpen && (
+                <div className="md:hidden absolute top-full left-0 w-full bg-slate-900 border-t border-slate-700 shadow-xl animate-in slide-in-from-top-2">
+                    {/* Navigation Links */}
+                    <div className="px-4 py-3 space-y-2">
+                        <Link
+                            href="/"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
+                                pathname === "/" ? "bg-purple-600" : "hover:bg-slate-800"
+                            }`}
+                        >
+                            Trang chủ
+                        </Link>
+                        <Link
+                            href="/products"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
+                                pathname === "/products" ? "bg-purple-600" : "hover:bg-slate-800"
+                            }`}
+                        >
+                            Sản phẩm
+                        </Link>
+                        <Link
+                            href="/news"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
+                                pathname === "/news" || pathname?.startsWith("/news/") ? "bg-purple-600" : "hover:bg-slate-800"
+                            }`}
+                        >
+                            Tin tức
+                        </Link>
+                        <Link
+                            href="/about"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
+                                pathname === "/about" ? "bg-purple-600" : "hover:bg-slate-800"
+                            }`}
+                        >
+                            Giới thiệu
+                        </Link>
+                        <Link
+                            href="/contact"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
+                                pathname === "/contact" ? "bg-purple-600" : "hover:bg-slate-800"
+                            }`}
+                        >
+                            Liên hệ thiết kế website
+                        </Link>
+                    </div>
+
+                    {/* User Actions */}
+                    {isAuthenticated && user ? (
+                        <div className="border-t border-slate-700 px-4 py-3 space-y-2">
+                            <div className="flex items-center gap-3 px-4 py-2 mb-2">
+                                {user.avatar?.includes("cloudinary.com") ? (
+                                    <CldImage
+                                        src={user.avatar}
+                                        width={40}
+                                        height={40}
+                                        alt={user.fullName}
+                                        crop="fill"
+                                        gravity="face"
+                                        className="rounded-full"
+                                    />
+                                ) : (
+                                    <img
+                                        src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`}
+                                        alt={user.fullName}
+                                        className="w-10 h-10 rounded-full"
+                                    />
+                                )}
+                                <div>
+                                    <p className="text-white font-semibold">{user.fullName}</p>
+                                    <p className="text-gray-400 text-sm">{user.email}</p>
+                                </div>
+                            </div>
+                            <Link
+                                href="/cart"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="flex items-center justify-between px-4 py-3 rounded-lg text-white hover:bg-slate-800 transition-all"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <ShoppingCart className="w-5 h-5 text-purple-400" />
+                                    <span>Giỏ hàng</span>
+                                </div>
+                                {getTotalItems() > 0 && (
+                                    <span className="px-2 py-1 bg-purple-600 text-white text-xs rounded-full">
+                                        {getTotalItems()}
+                                    </span>
+                                )}
+                            </Link>
+                            <Link
+                                href="/profile"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="flex items-center gap-2 px-4 py-3 rounded-lg text-white hover:bg-slate-800 transition-all"
+                            >
+                                <User className="w-5 h-5 text-purple-400" />
+                                <span>Tài khoản của tôi</span>
+                            </Link>
+                            <Link
+                                href="/orders"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="flex items-center gap-2 px-4 py-3 rounded-lg text-white hover:bg-slate-800 transition-all"
+                            >
+                                <ShoppingBag className="w-5 h-5 text-purple-400" />
+                                <span>Đơn hàng của tôi</span>
+                            </Link>
+                            <Link
+                                href="/wallet"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="flex items-center gap-2 px-4 py-3 rounded-lg text-white hover:bg-slate-800 transition-all"
+                            >
+                                <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                </svg>
+                                <span>Ví của tôi</span>
+                            </Link>
+                            <button
+                                onClick={() => {
+                                    handleLogout();
+                                    setIsMobileMenuOpen(false);
+                                }}
+                                className="flex items-center gap-2 w-full px-4 py-3 rounded-lg text-red-400 hover:bg-slate-800 transition-all"
+                            >
+                                <LogOut className="w-5 h-5" />
+                                <span>Đăng xuất</span>
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="border-t border-slate-700 px-4 py-3 space-y-2">
+                            <Link
+                                href="/login"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="block px-4 py-3 text-center border border-white rounded-lg text-white font-medium hover:bg-white/10 transition-all"
+                            >
+                                Đăng nhập
+                            </Link>
+                            <Link
+                                href="/register"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="block px-4 py-3 text-center bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-all"
+                            >
+                                Đăng ký
+                            </Link>
+                        </div>
+                    )}
+                </div>
+            )}
         </nav>
     );
 }
