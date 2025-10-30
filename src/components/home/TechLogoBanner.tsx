@@ -4,16 +4,15 @@ const TechLogoBanner = () => {
   const techLogos = [
     { name: "OpenAI", logo: "/techlogos/openai.svg" },
     { name: "Canva", logo: "/techlogos/canva.svg" },
-    { name: "Warp.dev", logo: "/techlogos/warp.svg"},
-    { name: "GitHub Copilot", logo: "/techlogos/github.svg"},
-    { name: "Google Gemini", logo: "/techlogos/gemini.svg"},
-    { name: "Capcut", logo: "/techlogos/capcut.svg"},
-    { name: "Grok AI", logo: "/techlogos/grok.svg"},
-    { name: "Youtube", logo: "/techlogos/youtube.svg"},
-    { name: "Adobe", logo: "/techlogos/adobe.svg"}
+    { name: "Warp.dev", logo: "/techlogos/warp.svg" },
+    { name: "GitHub Copilot", logo: "/techlogos/github.svg" },
+    { name: "Google Gemini", logo: "/techlogos/gemini.svg" },
+    { name: "Capcut", logo: "/techlogos/capcut.svg" },
+    { name: "Grok AI", logo: "/techlogos/grok.svg" },
+    { name: "Youtube", logo: "/techlogos/youtube.svg" },
 
 
-    
+
   ];
 
   // Create multiple duplicates for seamless infinite scroll
@@ -33,12 +32,12 @@ const TechLogoBanner = () => {
           Đối tác công nghệ
         </h2>
       </div>
-      
+
       <div className="relative">
         {/* Gradient overlays */}
         <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-muted/30 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-muted/30 to-transparent z-10 pointer-events-none" />
-        
+
         <div className="logo-scroll-wrapper">
           <div className="logo-scroll-track">
             {duplicatedLogos.map((logo, index) => (
