@@ -7,7 +7,4 @@ export type {
   RegisterFormData,
   LoginFormData,
   FormErrors,
-  User,
-  AuthResponse,
-  AuthError,
-} from "@/types";
+} from "@/types/common/forms";

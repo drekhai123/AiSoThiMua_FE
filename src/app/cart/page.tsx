@@ -62,7 +62,12 @@ export default function CartPage() {
     const finalPrice = Math.round(totalPrice * (1 - discount));
 
     // Check if user has enough balance
-    if (!user || user.balance < finalPrice) {
+    if (!user) {
+      alert("Vui lòng đăng nhập!");
+      return;
+    }
+    const userBalance = typeof user.balance === 'number' ? user.balance : Number(user.balance) || 0;
+    if (userBalance < finalPrice) {
       alert("Số dư không đủ! Vui lòng nạp thêm tiền vào ví.");
       router.push("/wallet");
       return;
@@ -133,18 +138,17 @@ export default function CartPage() {
             <div className="lg:col-span-2 space-y-4">
               {items.map((item) => (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-6 hover:border-purple-500 transition-all"
                 >
                   <div className="flex items-start gap-6">
-                    {/* Product Logo */}
-                    <div className="w-24 h-24 rounded-lg p-3 flex-shrink-0">
+                    {/* Product Image */}
+                    <div className="w-24 h-24 rounded-lg p-3 flex-shrink-0 relative">
                       <Image
-                        src={item.logo}
+                        src={item.images?.[0] || item.logo || "/placeholder.png"}
                         alt={item.name}
-                        width={72}
-                        height={72}
-                        className="object-contain"
+                        fill
+                        className="object-cover rounded"
                       />
                     </div>
 
@@ -160,7 +164,7 @@ export default function CartPage() {
                           </p>
                         </div>
                         <button
-                          onClick={() => removeFromCart(item.id)}
+                          onClick={() => removeFromCart(item._id)}
                           className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all"
                         >
                           <Trash2 className="w-5 h-5" />
@@ -173,7 +177,7 @@ export default function CartPage() {
                           <span className="text-gray-400 text-sm">Số lượng:</span>
                           <div className="flex items-center gap-2 bg-slate-700 rounded-lg p-1">
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              onClick={() => updateQuantity(item._id, item.quantity - 1)}
                               className="w-8 h-8 hover:bg-slate-600 rounded flex items-center justify-center transition-colors"
                             >
                               <Minus className="w-4 h-4 text-white" />
@@ -182,7 +186,7 @@ export default function CartPage() {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              onClick={() => updateQuantity(item._id, item.quantity + 1)}
                               className="w-8 h-8 hover:bg-slate-600 rounded flex items-center justify-center transition-colors"
                             >
                               <Plus className="w-4 h-4 text-white" />
@@ -193,13 +197,10 @@ export default function CartPage() {
                         {/* Price */}
                         <div className="text-right">
                           <p className="text-gray-400 text-sm mb-1">
-                            {item.price.toLocaleString()} Cá × {item.quantity}
+                            {(item.price || 0).toLocaleString()} Cá × {item.quantity}
                           </p>
                           <p className="text-2xl font-bold text-white">
-                            {(item.price * item.quantity).toLocaleString()} Cá
-                          </p>
-                          <p className="text-purple-400 text-sm">
-                            {item.duration}
+                            {((item.price || 0) * item.quantity).toLocaleString()} Cá
                           </p>
                         </div>
                       </div>
@@ -309,7 +310,7 @@ export default function CartPage() {
                       {user?.balance?.toLocaleString() || 0} Cá
                     </span>
                   </div>
-                  {user && user.balance < total && (
+                  {user && (typeof user.balance === 'number' ? user.balance : Number(user.balance) || 0) < total && (
                     <div className="flex items-center gap-2 text-red-400 text-sm mt-2">
                       <AlertCircle className="w-4 h-4" />
                       <span>Số dư không đủ. Vui lòng nạp thêm tiền.</span>
@@ -319,7 +320,7 @@ export default function CartPage() {
 
                 {/* Checkout Buttons */}
                 <div className="space-y-3">
-                  {user && user.balance >= total ? (
+                  {user && (typeof user.balance === 'number' ? user.balance : Number(user.balance) || 0) >= total ? (
                     <button
                       onClick={handleCheckout}
                       disabled={isProcessing}

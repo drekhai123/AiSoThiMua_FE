@@ -1,12 +1,15 @@
-// Auth form data types
+/**
+ * Common Form Types - UI Forms
+ */
 
+// Auth Forms
 export interface RegisterFormData {
   fullName: string;
   phone: string;
   email: string;
   password: string;
   confirmPassword: string;
-  notificationsOptIn?: boolean; // Người dùng đồng ý nhận thông báo/khuyến mãi
+  notificationsOptIn?: boolean;
 }
 
 export interface LoginFormData {
@@ -23,7 +26,7 @@ export interface ResetPasswordFormData {
   confirmPassword: string;
 }
 
-// Form errors type
+// Form Validation Errors
 export interface FormErrors {
   fullName?: string;
   phone?: string;
@@ -31,27 +34,4 @@ export interface FormErrors {
   password?: string;
   confirmPassword?: string;
   [key: string]: string | undefined;
-}
-
-// User type
-export interface User {
-  id: string;
-  fullName: string;
-  email: string;
-  phone?: string;
-  avatar?: string;
-  balance: number; // Số dư Cá
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-// Auth response types
-export interface AuthResponse {
-  user: User;
-  token: string;
-}
-
-export interface AuthError {
-  message: string;
-  field?: string;
 }

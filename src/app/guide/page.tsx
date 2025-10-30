@@ -1,26 +1,28 @@
-"use client";
-
-import { useState } from "react";
 import { ShoppingCart, CreditCard, Wallet, Package, CheckCircle, AlertCircle, HelpCircle } from "lucide-react";
+import type { Metadata } from "next";
+import SidebarNavigation from "@/components/policy/SidebarNavigation";
+import ScrollToTop from "@/components/policy/ScrollToTop";
+
+export const metadata: Metadata = {
+  title: "Hướng dẫn mua hàng - AiSoThiMua",
+  description: "Hướng dẫn chi tiết các bước mua hàng, thanh toán và nhận sản phẩm tại AiSoThiMua. Quy trình đơn giản, nhanh chóng với hệ thống thanh toán bằng Cá.",
+  keywords: ["hướng dẫn mua hàng", "thanh toán", "nạp Cá", "mua tài khoản AI", "quy trình mua hàng"],
+  openGraph: {
+    title: "Hướng dẫn mua hàng chi tiết - AiSoThiMua",
+    description: "Quy trình mua hàng đơn giản với 5 bước. Thanh toán bằng Cá, nhận sản phẩm tức thì.",
+    type: "website",
+  },
+};
+
+const sections = [
+  { id: "intro", title: "Giới thiệu", icon: "HelpCircle" },
+  { id: "steps", title: "Các bước mua hàng", icon: "ShoppingCart" },
+  { id: "payment", title: "Thanh toán", icon: "CreditCard" },
+  { id: "receive", title: "Nhận sản phẩm", icon: "Package" },
+  { id: "faq", title: "Câu hỏi thường gặp", icon: "AlertCircle" },
+];
 
 export default function GuidePage() {
-  const [activeSection, setActiveSection] = useState("intro");
-
-  const sections = [
-    { id: "intro", title: "Giới thiệu", icon: HelpCircle },
-    { id: "steps", title: "Các bước mua hàng", icon: ShoppingCart },
-    { id: "payment", title: "Thanh toán", icon: CreditCard },
-    { id: "receive", title: "Nhận sản phẩm", icon: Package },
-    { id: "faq", title: "Câu hỏi thường gặp", icon: AlertCircle },
-  ];
-
-  const scrollToSection = (sectionId: string) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <main className="min-h-screen py-20 bg-gradient-to-b from-slate-950 to-slate-900">
@@ -44,28 +46,7 @@ export default function GuidePage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar Navigation */}
           <div className="lg:col-span-1">
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-6 sticky top-24">
-              <h3 className="text-lg font-bold text-white mb-4">Mục lục</h3>
-              <nav className="space-y-2">
-                {sections.map((section) => {
-                  const Icon = section.icon;
-                  return (
-                    <button
-                      key={section.id}
-                      onClick={() => scrollToSection(section.id)}
-                      className={`w-full text-left px-4 py-3 rounded-lg transition-all flex items-center gap-3 ${
-                        activeSection === section.id
-                          ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
-                          : "text-gray-300 hover:text-white hover:bg-slate-700"
-                      }`}
-                    >
-                      <Icon className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-sm font-medium">{section.title}</span>
-                    </button>
-                  );
-                })}
-              </nav>
-            </div>
+            <SidebarNavigation sections={sections} />
           </div>
 
           {/* Main Content */}
@@ -431,11 +412,11 @@ export default function GuidePage() {
                       <div className="flex flex-wrap gap-3">
                         <div className="text-sm">
                           <span className="text-gray-400">Hotline:</span>
-                          <span className="text-white font-semibold ml-2">1900 1234</span>
+                          <span className="text-white font-semibold ml-2">+84 901267368</span>
                         </div>
                         <div className="text-sm">
                           <span className="text-gray-400">Email:</span>
-                          <span className="text-white font-semibold ml-2">support@aisothimua.com</span>
+                          <span className="text-white font-semibold ml-2">aisothimua@gmail.com</span>
                         </div>
                       </div>
                     </div>
@@ -446,15 +427,7 @@ export default function GuidePage() {
           </div>
         </div>
 
-        {/* Back to Top Button */}
-        <div className="text-center mt-12">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all font-semibold"
-          >
-            Về đầu trang
-          </button>
-        </div>
+        <ScrollToTop />
       </div>
     </main>
   );

@@ -24,8 +24,22 @@ export default function LoginForm() {
 
     try {
       await login(formData.email, formData.password);
-      // Redirect to home page after successful login
-      router.push("/");
+      
+      // Get user data to determine role
+      const userStr = localStorage.getItem("user");
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        
+        // Redirect based on role
+        if (user.role === "admin") {
+          router.push("/aduconcachienxu"); // Admin dashboard
+        } else {
+          router.push("/"); // User home page
+        }
+      } else {
+        // Fallback to home if user data not found
+        router.push("/");
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.";
       setError(errorMessage);

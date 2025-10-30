@@ -5,7 +5,8 @@
 import { httpClient } from "../http/client";
 import { serverGet } from "../http/server-fetch";
 import { API_ENDPOINTS } from "@/config/api";
-import type { GetProductsParams, GetProductsResponse } from "./dto";
+import type { GetProductsParams } from "@/types/api/request/product.request";
+import type { GetProductsResponse } from "@/types/api/response/product.response";
 
 /**
  * Get products list (Client-side)

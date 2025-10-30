@@ -5,10 +5,9 @@
 import { httpClient } from "../http/client";
 import { API_ENDPOINTS } from "@/config/api";
 import type {
-  GetProfileResponse,
   UpdateProfileRequest,
-  UpdateProfileResponse,
-} from "./dto";
+} from "@/types/api/request/auth.request";
+import type { GetProfileResponse, UpdateProfileResponse } from "@/types/api/response/auth.response";
 
 /**
  * Get user profile

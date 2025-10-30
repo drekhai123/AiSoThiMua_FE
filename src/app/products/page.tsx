@@ -11,6 +11,9 @@ import { Product } from "@/types";
 import { useCart } from "@/contexts/CartContext";
 
 // Sample products data (Giá tính bằng Cá)
+// TODO: Replace with API calls
+const PRODUCTS_DATA: any[] = [];
+/*
 const PRODUCTS_DATA: Product[] = [
   {
     id: "1",
@@ -164,10 +167,14 @@ const PRODUCTS_DATA: Product[] = [
     techLogo: "Notion",
   },
 ];
+*/
 
 // Categories and tech logos for filters
-const CATEGORIES = ["AI Chat", "AI Image", "Developer Tools", "Design", "Entertainment", "Video Editing", "Productivity"];
+const CATEGORIES: string[] = [];
+// const CATEGORIES = ["AI Chat", "AI Image", "Developer Tools", "Design", "Entertainment", "Video Editing", "Productivity"];
 
+const TECH_LOGOS: any[] = [];
+/*
 const TECH_LOGOS = [
   { name: "OpenAI", logo: "/techlogos/openai.svg" },
   { name: "Canva", logo: "/techlogos/canva.svg" },
@@ -178,6 +185,7 @@ const TECH_LOGOS = [
   { name: "Grok AI", logo: "/techlogos/grok.svg" },
   { name: "Youtube", logo: "/techlogos/youtube.svg" },
 ];
+*/
 
 const ITEMS_PER_PAGE = 9;
 

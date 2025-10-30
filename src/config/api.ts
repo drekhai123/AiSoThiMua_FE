@@ -30,6 +30,14 @@ export const API_ENDPOINTS = {
   products: "/products",
   productDetail: (id: string) => `/products/${id}`,
 
+  // Categories
+  categories: "/categories",
+  categoryTree: "/categories/tree",
+  categoryDetail: (id: string) => `/categories/${id}`,
+  categoryBySlug: (slug: string) => `/categories/slug/${slug}`,
+  categoryProductCount: (id: string) => `/categories/${id}/product-count`,
+  categoryToggleActive: (id: string) => `/categories/${id}/toggle-active`,
+
   // Orders
   orders: "/orders",
   orderDetail: (id: string) => `/orders/${id}`,

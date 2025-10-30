@@ -1,12 +1,8 @@
-"use client";
-
-import { useState, useRef } from "react";
 import {
   Mail,
   Phone,
   MapPin,
   Clock,
-  Send,
   MessageSquare,
   User,
   Building,
@@ -16,6 +12,20 @@ import {
   Shield,
   Headphones
 } from "lucide-react";
+import type { Metadata } from "next";
+import Image from "next/image";
+import ContactForm from "@/components/contact/ContactForm";
+
+export const metadata: Metadata = {
+  title: "Liên hệ thiết kế website - AiSoThiMua",
+  description: "Liên hệ ngay để nhận tư vấn miễn phí và báo giá chi tiết về thiết kế website chuyên nghiệp. Hỗ trợ 24/7, giao hàng đúng deadline, bảo hành kỹ thuật.",
+  keywords: ["liên hệ", "thiết kế website", "tư vấn web", "báo giá website", "web design", "contact"],
+  openGraph: {
+    title: "Liên hệ thiết kế website chuyên nghiệp - AiSoThiMua",
+    description: "Nhận tư vấn miễn phí về thiết kế website. Đội ngũ chuyên nghiệp, hỗ trợ 24/7, giao đúng deadline.",
+    type: "website",
+  },
+};
 
 const SERVICES = [
   {
@@ -53,107 +63,57 @@ const WHY_CHOOSE = [
 
 const PLANS = [
   {
-    name: "Gói Cơ Bản",
-    subtitle: "Khởi đầu nhanh gọn",
+    name: "Landing Page",
+    subtitle: "Trang đích đơn giản, hiệu quả",
     price: "3-5 triệu",
+    duration: "5-7 ngày",
     features: [
-      "Thiết kế chuẩn UX/UI",
-      "Responsive trên mọi thiết bị",
-      "Tối ưu tốc độ cơ bản",
-      "Form liên hệ + bản đồ",
-      "SEO on-page cơ bản",
+      "1 trang đơn (Single Page)",
+      "Thiết kế responsive",
+      "Form liên hệ tích hợp",
+      "Tối ưu tốc độ tải",
+      "SEO cơ bản",
+      "SSL bảo mật miễn phí",
     ],
-    cta: "Chọn gói Cơ bản",
+    cta: "Tư vấn ngay",
     highlight: false,
   },
   {
-    name: "Gói Tiêu Chuẩn",
-    subtitle: "Phù hợp đa số doanh nghiệp",
-    price: "8-12 triệu",
+    name: "Website Doanh Nghiệp",
+    subtitle: "Giải pháp hoàn chỉnh cho công ty vừa và nhỏ",
+    price: "10-15 triệu",
+    duration: "3-5 tuần",
     features: [
-      "Tất cả của Cơ bản",
+      "5-10 trang nội dung",
+      "Hệ thống quản trị CMS",
+      "Responsive mọi thiết bị",
       "SEO nâng cao + Schema",
-      "Trang sản phẩm/dịch vụ",
-      "CMS quản trị nội dung",
-      "Tích hợp Blog & Analytics",
+      "Tích hợp Google Analytics",
+      "Hỗ trợ & bảo hành 6 tháng",
     ],
-    cta: "Chọn gói Tiêu chuẩn",
+    cta: "Tư vấn ngay",
     highlight: true,
-    badge: "Phổ biến",
+    badge: "Phổ biến nhất",
   },
   {
-    name: "Gói Cao Cấp",
-    subtitle: "Tùy chỉnh chuyên sâu",
-    price: "15-30 triệu",
+    name: "Website Thương Mại",
+    subtitle: "Giải pháp bán hàng trực tuyến chuyên nghiệp",
+    price: "Từ 20 triệu",
+    duration: "6-10 tuần",
     features: [
-      "Tất cả của Tiêu chuẩn",
-      "Thiết kế nhận diện độc quyền",
-      "Hiệu ứng/animation cao cấp",
-      "Đa ngôn ngữ & tối ưu chuyển đổi",
-      "Bảo trì 3-6 tháng",
+      "Quản lý sản phẩm đa dạng",
+      "Giỏ hàng & thanh toán online",
+      "Quản lý đơn hàng & khách hàng",
+      "Tích hợp vận chuyển",
+      "Dashboard thống kê",
+      "Bảo hành & hỗ trợ 1 năm",
     ],
-    cta: "Chọn gói Cao cấp",
+    cta: "Tư vấn ngay",
     highlight: false,
   },
 ];
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    website: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const contactFormRef = useRef<HTMLElement>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    console.log("Form data:", formData);
-    setIsSubmitting(false);
-    setSubmitted(true);
-
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        website: "",
-        message: "",
-      });
-      setSubmitted(false);
-    }, 3000);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const scrollToContactForm = (planName: string) => {
-    if (contactFormRef.current) {
-      contactFormRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-      // Optional: pre-fill the message with selected plan
-      setTimeout(() => {
-        setFormData(prev => ({
-          ...prev,
-          message: `Tôi quan tâm đến ${planName}. `
-        }));
-      }, 500);
-    }
-  };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900">
@@ -234,6 +194,96 @@ export default function ContactPage() {
         </div>
       </section>
 
+      {/* Portfolio Section - Các dự án đã thực hiện bởi chúng tôi */}
+      <section className="py-16 bg-slate-900/50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-3">Các dự án đã thực hiện</h2>
+            <p className="text-gray-400">Những dự án chúng tôi tự hào đã hoàn thành</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* DNL Investment */}
+            <a
+              href="https://dnlinvestment.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-xl overflow-hidden hover:border-purple-500 transition-all duration-300 hover:scale-105 flex flex-col"
+            >
+              <div className="aspect-video bg-gradient-to-br from-blue-600/20 to-purple-600/20 flex items-center justify-center p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-60"></div>
+                <div className="relative z-10 text-center">
+                  <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg flex items-center justify-center p-2">
+                    <Image
+                      src="/project/dnl-logo.png"
+                      alt="DNL Investment"
+                      width={80}
+                      height={80}
+                      className="object-contain"
+                    />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">DNL Investment</h3>
+                </div>
+              </div>
+              <div className="p-6 flex-1 flex flex-col">
+                <p className="text-gray-300 text-sm mb-4 flex-1">
+                  Website tư vấn tài chính chuyên nghiệp với giao diện hiện đại, tích hợp tính năng realtime và quản lý tin tức và bài viết.
+                </p>
+                <div className="flex items-center justify-between mt-auto">
+                  <span className="text-purple-400 text-sm font-semibold group-hover:text-purple-300 transition-colors">
+                    Xem website →
+                  </span>
+                  <div className="flex gap-2">
+                    <span className="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded">React</span>
+                    <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded">.NET Core</span>
+                    <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">MS SQL Server</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+
+            {/* Agis Real */}
+            <a
+              href="https://agisreal.vn"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-xl overflow-hidden hover:border-purple-500 transition-all duration-300 hover:scale-105 flex flex-col"
+            >
+              <div className="aspect-video bg-gradient-to-br from-green-600/20 to-blue-600/20 flex items-center justify-center p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-60"></div>
+                <div className="relative z-10 text-center">
+                  <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg flex items-center justify-center p-2">
+                    <Image
+                      src="/project/agis-logo.png"
+                      alt="Agis Real"
+                      width={80}
+                      height={80}
+                      className="object-contain"
+                    />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">Agis Real</h3>
+                </div>
+              </div>
+              <div className="p-6 flex-1 flex flex-col">
+                <p className="text-gray-300 text-sm mb-4 flex-1">
+                  Website xem và tìm kiếm dự án bất động sản chuyên nghiệp với giao diện hiện đại, tích hợp bản đồ tương tác.
+                </p>
+                <div className="flex items-center justify-between mt-auto">
+                  <span className="text-purple-400 text-sm font-semibold group-hover:text-purple-300 transition-colors">
+                    Xem website →
+                  </span>
+                  <div className="flex gap-2">
+                    <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">Next.js</span>
+                    <span className="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded">NestJS</span>
+                    <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded">MySQL</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Gói thiết kế website */}
       <section className="py-16">
         <div className="container mx-auto px-4">
@@ -246,9 +296,8 @@ export default function ContactPage() {
             {PLANS.map((plan, idx) => (
               <div
                 key={idx}
-                className={`relative rounded-xl border ${
-                  plan.highlight ? "border-purple-500/60 ring-2 ring-purple-500/40" : "border-slate-700"
-                } bg-gradient-to-br from-slate-800 to-slate-900 p-6 hover:translate-y-[-2px] transition-all`}
+                className={`relative rounded-xl border ${plan.highlight ? "border-purple-500/60 ring-2 ring-purple-500/40" : "border-slate-700"
+                  } bg-gradient-to-br from-slate-800 to-slate-900 p-6 hover:translate-y-[-2px] transition-all`}
               >
                 {plan.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg">
@@ -261,9 +310,12 @@ export default function ContactPage() {
                   <p className="text-gray-400 text-sm mt-1">{plan.subtitle}</p>
                 </div>
 
-                <div className="mb-6">
-                  <span className="text-4xl font-extrabold text-white">{plan.price}</span>
-                  <span className="text-gray-400 ml-1">/ trọn gói</span>
+                <div className="mb-4">
+                  <div className="text-4xl font-extrabold text-white mb-2">{plan.price}</div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Clock className="w-4 h-4 text-purple-400" />
+                    <span className="text-gray-400">Thời gian: {plan.duration}</span>
+                  </div>
                 </div>
 
                 <ul className="space-y-3 mb-6">
@@ -275,16 +327,15 @@ export default function ContactPage() {
                   ))}
                 </ul>
 
-                <button
-                  onClick={() => scrollToContactForm(plan.name)}
-                  className={`w-full px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
-                    plan.highlight
-                      ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
-                      : "bg-slate-700 hover:bg-slate-600 text-white"
-                  }`}
+                <a
+                  href="#contact-form"
+                  className={`w-full px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${plan.highlight
+                    ? "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+                    : "bg-slate-700 hover:bg-slate-600 text-white"
+                    }`}
                 >
-                  <Send className="w-5 h-5" /> {plan.cta}
-                </button>
+                  {plan.cta}
+                </a>
 
                 {plan.highlight && (
                   <p className="text-center text-xs text-gray-400 mt-3">Khuyến nghị cho 80% khách hàng</p>
@@ -296,7 +347,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form & Info Section */}
-      <section ref={contactFormRef} className="py-20">
+      <section id="contact-form" className="py-20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Contact Info */}
@@ -315,7 +366,7 @@ export default function ContactPage() {
                     <div>
                       <p className="text-gray-400 text-sm mb-1">Email</p>
                       <a href="mailto:contact@aisothimua.vn" className="text-white hover:text-purple-400 transition-colors">
-                        khai.lumberjack@gmail.com
+                        aisothimua@gmail.com
                       </a>
                     </div>
                   </div>
@@ -377,151 +428,7 @@ export default function ContactPage() {
 
             {/* Contact Form */}
             <div className="lg:col-span-2">
-              <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-8">
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  Gửi yêu cầu tư vấn
-                </h3>
-                <p className="text-gray-400 mb-6">
-                  Điền thông tin bên dưới và chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất
-                </p>
-
-                {submitted ? (
-                  <div className="py-12 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500/10 rounded-full mb-4">
-                      <CheckCircle className="w-8 h-8 text-green-400" />
-                    </div>
-                    <h4 className="text-xl font-bold text-white mb-2">
-                      Gửi thành công!
-                    </h4>
-                    <p className="text-gray-400">
-                      Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.
-                    </p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Name & Email */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-white font-medium mb-2">
-                          Họ và tên <span className="text-red-400">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="name"
-                          required
-                          value={formData.name}
-                          onChange={handleChange}
-                          placeholder="Nguyễn Văn A"
-                          className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-white font-medium mb-2">
-                          Email <span className="text-red-400">*</span>
-                        </label>
-                        <input
-                          type="email"
-                          name="email"
-                          required
-                          value={formData.email}
-                          onChange={handleChange}
-                          placeholder="email@example.com"
-                          className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Phone & Company */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-white font-medium mb-2">
-                          Số điện thoại <span className="text-red-400">*</span>
-                        </label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          required
-                          value={formData.phone}
-                          onChange={handleChange}
-                          placeholder="0123 456 789"
-                          className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-white font-medium mb-2">
-                          Công ty / Tổ chức
-                        </label>
-                        <input
-                          type="text"
-                          name="company"
-                          value={formData.company}
-                          onChange={handleChange}
-                          placeholder="Công ty ABC"
-                          className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Website */}
-                    <div>
-                      <label className="block text-white font-medium mb-2">
-                        Website hiện tại (nếu có)
-                      </label>
-                      <input
-                        type="url"
-                        name="website"
-                        value={formData.website}
-                        onChange={handleChange}
-                        placeholder="https://example.com"
-                        className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                      />
-                    </div>
-
-                    {/* Message */}
-                    <div>
-                      <label className="block text-white font-medium mb-2">
-                        Nội dung yêu cầu <span className="text-red-400">*</span>
-                      </label>
-                      <textarea
-                        name="message"
-                        required
-                        value={formData.message}
-                        onChange={handleChange}
-                        rows={6}
-                        placeholder="Mô tả chi tiết về dự án website bạn muốn thiết kế..."
-                        className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-                      />
-                    </div>
-
-                    {/* Submit Button */}
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full px-6 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition-all font-semibold text-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Đang gửi...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5" />
-                          Gửi yêu cầu tư vấn
-                        </>
-                      )}
-                    </button>
-
-                    <p className="text-gray-400 text-sm text-center">
-                      Bằng việc gửi form, bạn đồng ý với{" "}
-                      <a href="/privacy" className="text-purple-400 hover:text-purple-300">
-                        Chính sách bảo mật
-                      </a>{" "}
-                      của chúng tôi
-                    </p>
-                  </form>
-                )}
-              </div>
+              <ContactForm />
             </div>
           </div>
         </div>

@@ -1,25 +1,27 @@
-"use client";
-
-import { useState } from "react";
 import { RotateCcw, CheckCircle, AlertCircle, Clock, Package, Shield } from "lucide-react";
+import type { Metadata } from "next";
+import SidebarNavigation from "@/components/policy/SidebarNavigation";
+import ScrollToTop from "@/components/policy/ScrollToTop";
+
+export const metadata: Metadata = {
+  title: "Chính sách đổi trả - AiSoThiMua",
+  description: "Chính sách đổi trả rõ ràng và công bằng tại AiSoThiMua. Hoàn Cá 100% cho các trường hợp đủ điều kiện. Xử lý nhanh chóng trong 24-48 giờ.",
+  keywords: ["chính sách đổi trả", "hoàn Cá", "quy trình đổi trả", "quyền lợi khách hàng"],
+  openGraph: {
+    title: "Chính sách đổi trả miễn phí - AiSoThiMua",
+    description: "Hoàn Cá 100% cho tài khoản chưa kích hoạt. Quy trình đơn giản, xử lý trong 24-48 giờ.",
+    type: "website",
+  },
+};
+
+const sections = [
+  { id: "overview", title: "Tổng quan", icon: "Package" },
+  { id: "conditions", title: "Điều kiện đổi trả", icon: "CheckCircle" },
+  { id: "process", title: "Quy trình", icon: "Clock" },
+  { id: "exceptions", title: "Trường hợp ngoại lệ", icon: "AlertCircle" },
+];
 
 export default function PolicyPage() {
-  const [activeSection, setActiveSection] = useState("overview");
-
-  const sections = [
-    { id: "overview", title: "Tổng quan", icon: Package },
-    { id: "conditions", title: "Điều kiện đổi trả", icon: CheckCircle },
-    { id: "process", title: "Quy trình", icon: Clock },
-    { id: "exceptions", title: "Trường hợp ngoại lệ", icon: AlertCircle },
-  ];
-
-  const scrollToSection = (sectionId: string) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <main className="min-h-screen py-20 bg-gradient-to-b from-slate-950 to-slate-900">
@@ -43,28 +45,7 @@ export default function PolicyPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar Navigation */}
           <div className="lg:col-span-1">
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-6 sticky top-24">
-              <h3 className="text-lg font-bold text-white mb-4">Mục lục</h3>
-              <nav className="space-y-2">
-                {sections.map((section) => {
-                  const Icon = section.icon;
-                  return (
-                    <button
-                      key={section.id}
-                      onClick={() => scrollToSection(section.id)}
-                      className={`w-full text-left px-4 py-3 rounded-lg transition-all flex items-center gap-3 ${
-                        activeSection === section.id
-                          ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
-                          : "text-gray-300 hover:text-white hover:bg-slate-700"
-                      }`}
-                    >
-                      <Icon className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-sm font-medium">{section.title}</span>
-                    </button>
-                  );
-                })}
-              </nav>
-            </div>
+            <SidebarNavigation sections={sections} />
           </div>
 
           {/* Main Content */}
@@ -363,11 +344,11 @@ export default function PolicyPage() {
                       <div className="flex flex-wrap gap-3">
                         <div className="text-sm">
                           <span className="text-gray-400">Email:</span>
-                          <span className="text-white font-semibold ml-2">support@aisothimua.com</span>
+                          <span className="text-white font-semibold ml-2">aisothimua@gmail.com</span>
                         </div>
                         <div className="text-sm">
                           <span className="text-gray-400">Hotline:</span>
-                          <span className="text-white font-semibold ml-2">1900 1234</span>
+                          <span className="text-white font-semibold ml-2">+84 901267368</span>
                         </div>
                       </div>
                     </div>
@@ -378,15 +359,7 @@ export default function PolicyPage() {
           </div>
         </div>
 
-        {/* Back to Top Button */}
-        <div className="text-center mt-12">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all font-semibold"
-          >
-            Về đầu trang
-          </button>
-        </div>
+        <ScrollToTop />
       </div>
     </main>
   );

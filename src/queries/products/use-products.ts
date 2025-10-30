@@ -7,7 +7,8 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProducts, searchProducts } from "@/services/products";
-import type { GetProductsParams, GetProductsResponse } from "@/services/products/dto";
+import type { GetProductsParams } from "@/types/api/request/product.request";
+import type { GetProductsResponse } from "@/types/api/response/product.response";
 
 /**
  * Query key factory

@@ -4,7 +4,8 @@
 
 import { httpClient } from "../http/client";
 import { API_ENDPOINTS } from "@/config/api";
-import type { UpdateFullNameRequest, UpdateFullNameResponse } from "./dto";
+import type { UpdateFullNameRequest } from "@/types/api/request/auth.request";
+import type { UpdateFullNameResponse } from "@/types/api/response/auth.response";
 
 /**
  * Update user full name

@@ -98,7 +98,7 @@ export const SEO_CONFIGS = {
   contact: {
     title: "Liên hệ - Hỗ trợ & Thiết kế Website",
     description:
-      "Liên hệ với ASTM để được tư vấn, hỗ trợ kỹ thuật hoặc đặt thiết kế website chuyên nghiệp. Hotline: 0123-456-789. Email: support@aisothimua.com",
+      "Liên hệ với ASTM để được tư vấn, hỗ trợ kỹ thuật hoặc đặt thiết kế website chuyên nghiệp. Hotline: +84 901267368. Email: aisothimua@gmail.com",
     keywords: "liên hệ astm, hỗ trợ ai tools, thiết kế website, tư vấn ai",
   },
 };

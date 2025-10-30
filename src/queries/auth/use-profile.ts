@@ -7,7 +7,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getProfile, updateProfile } from "@/services/auth";
-import type { UpdateProfileRequest } from "@/services/auth/dto";
+import type { UpdateProfileRequest } from "@/types/api/request/auth.request";
 
 /**
  * Query key factory

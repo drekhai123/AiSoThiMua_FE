@@ -6,10 +6,12 @@ import { httpClient } from "../http/client";
 import { API_ENDPOINTS } from "@/config/api";
 import type {
   ResetPasswordRequest,
-  ResetPasswordResponse,
   ChangePasswordRequest,
-  ChangePasswordResponse
-} from "./dto";
+} from "@/types/api/request/auth.request";
+import type {
+  ResetPasswordResponse,
+  ChangePasswordResponse,
+} from "@/types/api/response/auth.response";
 
 /**
  * Reset password using token from email

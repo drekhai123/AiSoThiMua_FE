@@ -15,7 +15,8 @@ import type {
   ForgotPasswordRequest,
   ResetPasswordRequest,
   ChangePasswordRequest,
-} from "@/services/auth/dto";
+} from "@/types/api/request/auth.request";
+
 
 /**
  * Hook to request forgot password

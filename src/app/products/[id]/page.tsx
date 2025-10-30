@@ -31,9 +31,16 @@ import {
 import { Review, ReviewStats } from "@/types/review";
 
 // Sample products data (same as products page)
-const PRODUCTS_DATA: Product[] = [
+// Using type assertion for mock data compatibility
+// TODO: Replace with API calls
+const PRODUCTS_DATA: any[] = [];
+/*
+const PRODUCTS_DATA = [
   {
+    _id: "1",
     id: "1",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "ChatGPT Plus",
     price: 299,
     originalPrice: 350,
@@ -70,14 +77,17 @@ const PRODUCTS_DATA: Product[] = [
     allowUpgrade: true, // Cho phép nâng cấp
     description: "Truy cập không giới hạn GPT-4, tốc độ nhanh hơn, ưu tiên phản hồi",
     logo: "/techlogos/openai.svg",
-    category: ["AI Chat", "Productivity"],
+    category: "AI Chat",
     techLogo: "OpenAI",
     badge: "Phổ biến",
     sold: 2500,
     stock: "unlimited",
   },
   {
+    _id: "2",
     id: "2",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "ChatGPT Pro",
     price: 899,
     duration: "/tháng",
@@ -88,7 +98,10 @@ const PRODUCTS_DATA: Product[] = [
     badge: "Premium",
   },
   {
+    _id: "3",
     id: "3",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "Midjourney Standard",
     price: 599,
     originalPrice: 750,
@@ -106,13 +119,16 @@ const PRODUCTS_DATA: Product[] = [
     ],
     description: "Tạo hình ảnh AI chất lượng cao, 15 giờ Fast GPU/tháng",
     logo: "/techlogos/midjourney.svg",
-    category: ["AI Image", "Design"],
+    category: "AI Image",
     techLogo: "Midjourney",
     sold: 1500,
     stock: 45,
   },
   {
+    _id: "4",
     id: "4",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "GitHub Copilot",
     price: 199,
     duration: "/tháng",
@@ -123,7 +139,10 @@ const PRODUCTS_DATA: Product[] = [
     badge: "Mới",
   },
   {
+    _id: "5",
     id: "5",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "Claude Pro",
     price: 399,
     duration: "/tháng",
@@ -133,7 +152,10 @@ const PRODUCTS_DATA: Product[] = [
     techLogo: "Claude",
   },
   {
+    _id: "6",
     id: "6",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "Canva Pro",
     price: 249,
     originalPrice: 320,
@@ -146,12 +168,15 @@ const PRODUCTS_DATA: Product[] = [
     ],
     description: "Thiết kế đồ họa chuyên nghiệp với AI, templates không giới hạn",
     logo: "/techlogos/canva.svg",
-    category: ["Design", "Productivity"],
+    category: "Design",
     techLogo: "Canva",
     badge: "Phổ biến",
   },
   {
+    _id: "7",
     id: "7",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "Google Gemini Advanced",
     price: 449,
     duration: "/tháng",
@@ -162,7 +187,10 @@ const PRODUCTS_DATA: Product[] = [
     badge: "Mới",
   },
   {
+    _id: "8",
     id: "8",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "YouTube Premium",
     price: 179,
     originalPrice: 230,
@@ -175,7 +203,10 @@ const PRODUCTS_DATA: Product[] = [
     badge: "Phổ biến",
   },
   {
+    _id: "9",
     id: "9",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "Capcut Pro",
     price: 159,
     duration: "/tháng",
@@ -202,7 +233,10 @@ const PRODUCTS_DATA: Product[] = [
     stock: "unlimited",
   },
   {
+    _id: "10",
     id: "10",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "Grok Premium",
     price: 699,
     duration: "/tháng",
@@ -213,7 +247,10 @@ const PRODUCTS_DATA: Product[] = [
     badge: "Premium",
   },
   {
+    _id: "11",
     id: "11",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "Warp Pro",
     price: 349,
     duration: "/tháng",
@@ -223,7 +260,10 @@ const PRODUCTS_DATA: Product[] = [
     techLogo: "Warp.dev",
   },
   {
+    _id: "12",
     id: "12",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     name: "Notion AI",
     price: 199,
     duration: "/tháng",
@@ -233,8 +273,12 @@ const PRODUCTS_DATA: Product[] = [
     techLogo: "Notion",
   },
 ];
+*/
 
 // Product features by ID
+// TODO: Replace with API calls
+const PRODUCT_FEATURES: Record<string, string[]> = {};
+/*
 const PRODUCT_FEATURES: Record<string, string[]> = {
   "1": [
     "Truy cập GPT-4 không giới hạn",
@@ -319,10 +363,14 @@ const PRODUCT_FEATURES: Record<string, string[]> = {
     "Generate content ideas",
     "Auto-fill tables",
     "Unlimited AI usage",
-  ],
+  },
 };
+*/
 
 // Mock reviews data
+// TODO: Replace with API calls
+const MOCK_REVIEWS: Record<string, Review[]> = {};
+/*
 const MOCK_REVIEWS: Record<string, Review[]> = {
   "1": [
     {
@@ -371,6 +419,7 @@ const MOCK_REVIEWS: Record<string, Review[]> = {
     },
   ],
 };
+*/
 
 // Generate reviews for all products
 const generateDefaultReviews = (productId: string, productName: string): Review[] => [
@@ -523,15 +572,15 @@ export default function ProductDetailPage() {
     return { x: 0, y: 0 };
   };
 
-  const features = PRODUCT_FEATURES[product.id] || [];
+  const features = product.id ? (PRODUCT_FEATURES[product.id] || []) : [];
 
   // Get current price based on selected plan
   const basePlanPrice = product.pricingPlans
-    ? product.pricingPlans[selectedPlan].price
+    ? product.pricingPlans[selectedPlan]?.price
     : product.price;
 
   const currentDuration = product.pricingPlans
-    ? product.pricingPlans[selectedPlan].duration
+    ? product.pricingPlans[selectedPlan]?.duration
     : product.duration;
 
   // Get warranty price
@@ -540,7 +589,7 @@ export default function ProductDetailPage() {
     : 0;
 
   // Total price = plan price + warranty price
-  const currentPrice = basePlanPrice + warrantyPrice;
+  const currentPrice = (basePlanPrice || 0) + warrantyPrice;
 
   return (
     <main className="min-h-screen py-20 bg-gradient-to-b from-slate-950 to-slate-900">
@@ -923,7 +972,7 @@ export default function ProductDetailPage() {
               <div className="space-y-2 mb-4">
                 <div className="flex items-center justify-between text-gray-300">
                   <span>Gói {currentDuration}:</span>
-                  <span className="font-semibold">{basePlanPrice.toLocaleString()} Cá</span>
+                  <span className="font-semibold">{(basePlanPrice || 0).toLocaleString()} Cá</span>
                 </div>
                 {warrantyPrice > 0 && (
                   <div className="flex items-center justify-between text-gray-300">

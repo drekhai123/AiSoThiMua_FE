@@ -6,12 +6,14 @@ import { httpClient } from "../http/client";
 import { API_ENDPOINTS } from "@/config/api";
 import type {
   RegisterRequest,
-  RegisterResponse,
   VerifyOtpRequest,
-  VerifyOtpResponse,
   ResendOtpRequest,
+} from "@/types/api/request/auth.request";
+import type {
+  RegisterResponse,
+  VerifyOtpResponse,
   ResendOtpResponse,
-} from "./dto";
+} from "@/types/api/response/auth.response";
 
 /**
  * Register new user
@@ -23,8 +25,6 @@ export async function register(
     API_ENDPOINTS.register,
     data
   );
-
-  // Register không trả về token, cần verify OTP trước
   return response;
 }
 
@@ -38,9 +38,6 @@ export async function verifyOtp(
     API_ENDPOINTS.verifyOtp,
     data
   );
-
-  // VerifyOTP chỉ xác nhận email, không trả về token
-  // User cần login sau khi verify
   return response;
 }
 

@@ -1,7 +1,17 @@
-"use client";
-
 import { Shield, Zap, Heart, TrendingUp, Award, CheckCircle, Star, Code, Palette, Smartphone } from "lucide-react";
 import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Về AiSoThiMua - Cung cấp tài khoản AI & thiết kế website chuyên nghiệp",
+  description: "Nền tảng cung cấp tài khoản AI & công nghệ hàng đầu và thiết kế website chuyên nghiệp tại Việt Nam. Với hơn 10,000+ khách hàng tin tưởng, cam kết mang đến giải pháp công nghệ tốt nhất.",
+  keywords: ["tài khoản AI", "thiết kế website", "công nghệ", "AI tools", "web design", "OpenAI", "Canva", "GitHub"],
+  openGraph: {
+    title: "Về AiSoThiMua - Nền tảng AI & thiết kế website hàng đầu",
+    description: "Cung cấp tài khoản AI, công nghệ cao cấp và dịch vụ thiết kế website chuyên nghiệp với 10,000+ khách hàng tin tưởng.",
+    type: "website",
+  },
+};
 
 const SERVICES = [
   {

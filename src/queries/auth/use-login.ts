@@ -7,7 +7,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { login, logout } from "@/services/auth";
-import type { LoginRequest } from "@/services/auth/dto";
+import type { LoginRequest } from "@/types/api/request/auth.request";
 
 /**
  * Hook to login

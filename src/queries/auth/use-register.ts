@@ -11,7 +11,7 @@ import type {
   RegisterRequest,
   VerifyOtpRequest,
   ResendOtpRequest,
-} from "@/services/auth/dto";
+} from "@/types/api/request/auth.request";
 
 /**
  * Hook to register

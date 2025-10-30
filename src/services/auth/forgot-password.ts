@@ -4,10 +4,8 @@
 
 import { httpClient } from "../http/client";
 import { API_ENDPOINTS } from "@/config/api";
-import type {
-  ForgotPasswordRequest,
-  ForgotPasswordResponse,
-} from "./dto";
+import type { ForgotPasswordRequest } from "@/types/api/request/auth.request";
+import type { ForgotPasswordResponse } from "@/types/api/response/auth.response";
 
 /**
  * Request password reset

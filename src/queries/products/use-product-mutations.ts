@@ -16,7 +16,7 @@ import {
 import type {
   CreateProductRequest,
   UpdateProductRequest,
-} from "@/services/products/dto";
+} from "@/types/api/request/product.request";
 import { productsKeys } from "./use-products";
 
 /**

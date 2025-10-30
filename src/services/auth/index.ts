@@ -2,7 +2,11 @@
  * Auth Service Exports
  */
 
-export * from "./dto";
+// Export types from centralized types folder
+export type * from "@/types/api/request/auth.request";
+export type * from "@/types/api/response/auth.response";
+
+// Export service functions
 export * from "./login";
 export * from "./register";
 export * from "./forgot-password";

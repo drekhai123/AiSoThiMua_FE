@@ -72,7 +72,7 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }: ProductCardProps) => {
               ) : product.stock === "pre-order" ? (
                 <span className="text-orange-400">Đặt hàng trước</span>
               ) : (
-                <span className={`font-semibold ${product.stock < 10 ? "text-red-400" : "text-gray-400"}`}>
+                <span className={`font-semibold ${typeof product.stock === 'number' && product.stock < 10 ? "text-red-400" : "text-gray-400"}`}>
                   {product.stock}
                 </span>
               )}
@@ -94,7 +94,7 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }: ProductCardProps) => {
           {/* Current Price */}
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-bold text-white" suppressHydrationWarning>
-              {product.price.toLocaleString("vi-VN")}
+              {(product.price || 0).toLocaleString("vi-VN")}
             </span>
             <span className="text-purple-400 font-semibold">Cá</span>
             <span className="text-gray-400 text-sm">{product.duration}</span>

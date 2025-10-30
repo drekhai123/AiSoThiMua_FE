@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import Image from "next/image";
+import { CldImage } from "next-cloudinary";
+import { usePathname, useRouter } from "next/navigation";
 import { User, LogOut, Settings, ShoppingBag, Heart, ChevronDown, Bell, ShoppingCart, Trash2, Plus, Minus, FileText } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
@@ -212,7 +213,7 @@ export default function Navbar() {
                                             {items.length > 0 ? (
                                                 items.map((item) => (
                                                     <div
-                                                        key={item.id}
+                                                        key={item._id || item.id}
                                                         className="px-4 py-4 border-b border-slate-700 hover:bg-slate-700/50 transition-colors"
                                                     >
                                                         <div className="flex items-start gap-3">
@@ -233,13 +234,13 @@ export default function Navbar() {
                                                                     {item.name}
                                                                 </h4>
                                                                 <p className="text-gray-400 text-sm mb-2">
-                                                                    {item.price.toLocaleString()} Cá {item.duration}
+                                                                    {(item.price || 0).toLocaleString()} Cá {item.duration}
                                                                 </p>
 
                                                                 {/* Quantity Controls */}
                                                                 <div className="flex items-center gap-2">
                                                                     <button
-                                                                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                                        onClick={() => updateQuantity(item._id || item.id || '', item.quantity - 1)}
                                                                         className="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded flex items-center justify-center transition-colors"
                                                                     >
                                                                         <Minus className="w-3 h-3 text-white" />
@@ -248,13 +249,13 @@ export default function Navbar() {
                                                                         {item.quantity}
                                                                     </span>
                                                                     <button
-                                                                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                                        onClick={() => updateQuantity(item._id || item.id || '', item.quantity + 1)}
                                                                         className="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded flex items-center justify-center transition-colors"
                                                                     >
                                                                         <Plus className="w-3 h-3 text-white" />
                                                                     </button>
                                                                     <button
-                                                                        onClick={() => removeFromCart(item.id)}
+                                                                        onClick={() => removeFromCart(item._id || item.id || '')}
                                                                         className="ml-auto p-1 text-red-400 hover:text-red-300 transition-colors"
                                                                     >
                                                                         <Trash2 className="w-4 h-4" />
@@ -396,13 +397,25 @@ export default function Navbar() {
                                     className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-300 border border-white/20"
                                 >
                                     <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-purple-500">
-                                        <Image
-                                            src={user.avatar || "/team/member.png"}
-                                            alt={user.fullName}
-                                            fill
-                                            sizes="32px"
-                                            className="object-cover"
-                                        />
+                                        {user.avatar?.includes("cloudinary.com") ? (
+                                            <CldImage
+                                                src={user.avatar}
+                                                width={32}
+                                                height={32}
+                                                alt={user.fullName}
+                                                crop="fill"
+                                                gravity="face"
+                                                sizes="32px"
+                                            />
+                                        ) : (
+                                            <img
+                                                src={user.avatar || "/team/member.png"}
+                                                alt={user.fullName}
+                                                width={32}
+                                                height={32}
+                                                className="object-cover w-full h-full"
+                                            />
+                                        )}
                                     </div>
                                     <span className="text-white font-medium hidden lg:block">
                                         {user.fullName}

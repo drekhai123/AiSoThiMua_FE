@@ -288,7 +288,7 @@ function WalletPageContent() {
                 <span className="text-2xl font-semibold text-purple-100">Cá</span>
               </div>
               <p className="text-purple-100 mt-2">
-                ≈ {((user?.balance || 0) * 1000).toLocaleString()} VNĐ
+                ≈ {((typeof user?.balance === 'number' ? user.balance : Number(user?.balance) || 0) * 1000).toLocaleString()} VNĐ
               </p>
             </div>
           </div>

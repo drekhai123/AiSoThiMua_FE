@@ -1,9 +1,9 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { User } from "@/types/auth";
+import { User } from "@/types/models/user.model";
 import { login as loginService, register as registerService, getCurrentUser, getToken } from "@/services/auth";
-import type { RegisterRequest } from "@/services/auth/dto";
+import type { RegisterRequest } from "@/types/api/request/auth.request";
 
 interface AuthContextType {
   user: User | null;
@@ -36,9 +36,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             email: savedUser.email,
             phone: savedUser.phone,
             avatar: savedUser.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${savedUser.id}`,
-            balance: savedUser.balance ? parseFloat(savedUser.balance) : 0,
-            createdAt: savedUser.createdAt ? new Date(savedUser.createdAt) : new Date(),
-            updatedAt: savedUser.updatedAt ? new Date(savedUser.updatedAt) : new Date(),
+            balance: savedUser.balance || '0',
+            role: savedUser.role || 'user',
+            createdAt: savedUser.createdAt || new Date().toISOString(),
+            updatedAt: savedUser.updatedAt || new Date().toISOString(),
           };
           setUser(userData);
         } catch (error) {
@@ -68,9 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: response.data.user.email,
         phone: response.data.user.phone,
         avatar: response.data.user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${response.data.user.id}`,
-        balance: response.data.user.balance ? parseFloat(response.data.user.balance) : 0,
-        createdAt: new Date(response.data.user.createdAt),
-        updatedAt: new Date(response.data.user.updatedAt),
+        balance: response.data.user.balance || '0',
+        role: response.data.user.role || 'user',
+        createdAt: response.data.user.createdAt,
+        updatedAt: response.data.user.updatedAt,
       };
 
       setUser(userData);
@@ -106,9 +108,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: savedUser.email,
           phone: savedUser.phone,
           avatar: savedUser.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${savedUser.id}`,
-          balance: savedUser.balance ? parseFloat(savedUser.balance) : 0,
-          createdAt: savedUser.createdAt ? new Date(savedUser.createdAt) : new Date(),
-          updatedAt: savedUser.updatedAt ? new Date(savedUser.updatedAt) : new Date(),
+          balance: savedUser.balance || '0',
+          role: savedUser.role || 'user',
+          createdAt: savedUser.createdAt || new Date().toISOString(),
+          updatedAt: savedUser.updatedAt || new Date().toISOString(),
         };
         console.log("Setting user in context to:", userData);
         console.log("Avatar being set:", userData.avatar);

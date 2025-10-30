@@ -5,12 +5,14 @@
 import { httpClient } from "../http/client";
 import { API_ENDPOINTS } from "@/config/api";
 import type {
-  CreateProductRequest,
   CreateProductResponse,
-  UpdateProductRequest,
   UpdateProductResponse,
   DeleteProductResponse,
-} from "./dto";
+} from "@/types/api/response/product.response";
+import type {
+  CreateProductRequest,
+  UpdateProductRequest,
+} from "@/types/api/request/product.request";
 
 /**
  * Create new product

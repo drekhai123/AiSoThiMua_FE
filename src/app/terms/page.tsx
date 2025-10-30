@@ -1,26 +1,28 @@
-"use client";
-
-import { useState } from "react";
 import { ArrowLeft, FileText, Shield, CreditCard, Mail, Phone, MapPin, CheckCircle, AlertCircle, Info } from "lucide-react";
+import type { Metadata } from "next";
+import SidebarNavigation from "@/components/policy/SidebarNavigation";
+import ScrollToTop from "@/components/policy/ScrollToTop";
+
+export const metadata: Metadata = {
+  title: "Điều khoản dịch vụ - AiSoThiMua",
+  description: "Các điều khoản và chính sách sử dụng dịch vụ của AiSoThiMua. Cam kết bảo mật thông tin, thanh toán an toàn và hỗ trợ 24/7.",
+  keywords: ["điều khoản dịch vụ", "chính sách", "bảo mật", "thanh toán", "quy định"],
+  openGraph: {
+    title: "Điều khoản dịch vụ và chính sách - AiSoThiMua",
+    description: "Tìm hiểu về các điều khoản sử dụng, chính sách bảo mật và quy trình thanh toán bằng Cá.",
+    type: "website",
+  },
+};
+
+const sections = [
+  { id: "introduction", title: "Giới thiệu", icon: "Info" },
+  { id: "terms", title: "Điều khoản sử dụng", icon: "FileText" },
+  { id: "privacy", title: "Bảo mật thông tin", icon: "Shield" },
+  { id: "payment", title: "Thanh toán & Hoàn tiền", icon: "CreditCard" },
+  { id: "contact", title: "Liên hệ & Hỗ trợ", icon: "Mail" },
+];
 
 export default function TermsPage() {
-  const [activeSection, setActiveSection] = useState("introduction");
-
-  const sections = [
-    { id: "introduction", title: "Giới thiệu", icon: Info },
-    { id: "terms", title: "Điều khoản sử dụng", icon: FileText },
-    { id: "privacy", title: "Bảo mật thông tin", icon: Shield },
-    { id: "payment", title: "Thanh toán & Hoàn tiền", icon: CreditCard },
-    { id: "contact", title: "Liên hệ & Hỗ trợ", icon: Mail },
-  ];
-
-  const scrollToSection = (sectionId: string) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <main className="min-h-screen py-20 bg-gradient-to-b from-slate-950 to-slate-900">
@@ -45,27 +47,7 @@ export default function TermsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar Navigation */}
           <div className="lg:col-span-1">
-            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-6 sticky top-24">
-              <h3 className="text-lg font-bold text-white mb-4">Mục lục</h3>
-              <nav className="space-y-2">
-                {sections.map((section) => {
-                  const Icon = section.icon;
-                  return (
-                    <button
-                      key={section.id}
-                      onClick={() => scrollToSection(section.id)}
-                      className={`w-full text-left px-4 py-3 rounded-lg transition-all flex items-center gap-3 ${activeSection === section.id
-                        ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
-                        : "text-gray-300 hover:text-white hover:bg-slate-700"
-                        }`}
-                    >
-                      <Icon className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-sm font-medium">{section.title}</span>
-                    </button>
-                  );
-                })}
-              </nav>
-            </div>
+            <SidebarNavigation sections={sections} />
           </div>
 
           {/* Main Content */}
@@ -444,7 +426,7 @@ export default function TermsPage() {
                           </div>
                           <div>
                             <p className="text-white font-semibold">Email hỗ trợ</p>
-                            <p className="text-gray-300 text-sm">support@aisothimua.com</p>
+                            <p className="text-gray-300 text-sm">aisothimua@gmail.com</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
@@ -453,7 +435,7 @@ export default function TermsPage() {
                           </div>
                           <div>
                             <p className="text-white font-semibold">Hotline</p>
-                            <p className="text-gray-300 text-sm">1900 1234 (24/7)</p>
+                            <p className="text-gray-300 text-sm">+84 901267368 (24/7)</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
@@ -463,7 +445,7 @@ export default function TermsPage() {
                           <div>
                             <p className="text-white font-semibold">Địa chỉ</p>
                             <p className="text-gray-300 text-sm">
-                              123 Đường ABC, Quận 1, TP.HCM
+                              Hồ Chí Minh, Việt Nam
                             </p>
                           </div>
                         </div>
@@ -510,15 +492,7 @@ export default function TermsPage() {
           </div>
         </div>
 
-        {/* Back to Top Button */}
-        <div className="text-center mt-12">
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all font-semibold"
-          >
-            Về đầu trang
-          </button>
-        </div>
+        <ScrollToTop />
       </div>
     </main>
   );

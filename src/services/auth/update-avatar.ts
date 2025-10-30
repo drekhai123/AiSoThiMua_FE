@@ -4,7 +4,8 @@
 
 import { httpClient } from "../http/client";
 import { API_ENDPOINTS } from "@/config/api";
-import type { UpdateAvatarRequest, UpdateAvatarResponse } from "./dto";
+import type { UpdateAvatarRequest } from "@/types/api/request/auth.request";
+import type { UpdateAvatarResponse } from "@/types/api/response/auth.response";
 
 /**
  * Update user avatar
@@ -21,7 +22,7 @@ export async function updateAvatar(data: UpdateAvatarRequest): Promise<UpdateAva
       if (typeof window !== "undefined") {
         const existingUser = localStorage.getItem("user");
         let updatedUser = response.data.user;
-        
+
         if (existingUser) {
           try {
             const parsedUser = JSON.parse(existingUser);
@@ -31,7 +32,7 @@ export async function updateAvatar(data: UpdateAvatarRequest): Promise<UpdateAva
             console.error("Failed to parse existing user:", e);
           }
         }
-        
+
         localStorage.setItem("user", JSON.stringify(updatedUser));
       }
     }

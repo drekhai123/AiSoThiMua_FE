@@ -13,6 +13,7 @@ import {
   Newspaper,
   Settings,
   LogOut,
+  Folder,
 } from "lucide-react";
 
 const menuItems = [
@@ -25,6 +26,11 @@ const menuItems = [
     title: "Quản lý Users",
     icon: Users,
     href: "/aduconcachienxu/users",
+  },
+  {
+    title: "Quản lý Danh mục",
+    icon: Folder,
+    href: "/aduconcachienxu/categories",
   },
   {
     title: "Quản lý Sản phẩm",
@@ -84,11 +90,10 @@ export default function AdminSidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                isActive
-                  ? "bg-blue-600 text-white"
-                  : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
-              }`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
+                ? "bg-blue-600 text-white"
+                : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
+                }`}
             >
               <Icon className="w-5 h-5" />
               <span className="font-medium">{item.title}</span>

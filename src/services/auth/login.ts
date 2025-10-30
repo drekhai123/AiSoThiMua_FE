@@ -4,7 +4,8 @@
 
 import { httpClient } from "../http/client";
 import { API_ENDPOINTS } from "@/config/api";
-import type { LoginRequest, LoginResponse } from "./dto";
+import type { LoginRequest } from "@/types/api/request/auth.request";
+import type { LoginResponse } from "@/types/api/response/auth.response";
 
 /**
  * Login user
