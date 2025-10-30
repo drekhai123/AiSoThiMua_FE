@@ -80,7 +80,7 @@ const WHY_CHOOSE_US = [
   "Giá cả minh bạch, không phí ẩn",
   "Hệ thống thanh toán an toàn với đơn vị Cá",
   "Bảo hành & hỗ trợ kỹ thuật lâu dài",
-  "Tích điểm, nhận ưu đãi hấp dẫn",
+  "Vô vàn ưu đãi hấp dẫn",
 ];
 
 const TECH_PARTNERS = [
@@ -237,10 +237,10 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Đối tác công nghệ
+              Các hãng công nghệ chính
             </h2>
             <p className="text-gray-400 text-lg">
-              Chúng tôi hợp tác với các thương hiệu công nghệ hàng đầu thế giới
+              Chúng tôi cung cấp sản phẩm từ các hãng công nghệ hàng đầu
             </p>
           </div>
 
@@ -386,7 +386,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600">
+      {/* <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -405,7 +405,7 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }

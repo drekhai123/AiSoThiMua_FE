@@ -8,6 +8,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { User, LogOut, Settings, ShoppingBag, Heart, ChevronDown, Bell, ShoppingCart, Trash2, Plus, Minus, FileText, Menu, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
+import { getCategories } from "@/services/category.service";
+import type { Category } from "@/types/models/category.model";
 
 // Mock notifications data
 const MOCK_NOTIFICATIONS = [
@@ -53,10 +55,27 @@ export default function Navbar() {
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isProductsMenuOpen, setIsProductsMenuOpen] = useState(false);
+    const productsMenuTimer = useRef<NodeJS.Timeout | null>(null);
+    const [categories, setCategories] = useState<Category[]>([]);
     const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const notificationRef = useRef<HTMLDivElement>(null);
     const cartRef = useRef<HTMLDivElement>(null);
+    const productsMenuRef = useRef<HTMLDivElement>(null);
+
+    // Fetch categories
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await getCategories({ includeInactive: false });
+                setCategories(data);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -69,6 +88,9 @@ export default function Navbar() {
             }
             if (cartRef.current && !cartRef.current.contains(event.target as Node)) {
                 setIsCartOpen(false);
+            }
+            if (productsMenuRef.current && !productsMenuRef.current.contains(event.target as Node)) {
+                setIsProductsMenuOpen(false);
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
@@ -142,15 +164,84 @@ export default function Navbar() {
                         <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-white transform transition-transform duration-300 ${pathname === "/" ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                             }`}></span>
                     </Link>
-                    <Link
-                        href="/products"
-                        className={`relative text-white hover:text-purple-200 transition-all py-2 group ${pathname === "/products" ? "font-semibold" : ""
-                            }`}
+                    {/* Products with dropdown */}
+                    <div
+                        className="relative"
+                        ref={productsMenuRef}
+                        onMouseEnter={() => {
+                            if (productsMenuTimer.current) {
+                                clearTimeout(productsMenuTimer.current);
+                            }
+                            setIsProductsMenuOpen(true);
+                        }}
+                        onMouseLeave={() => {
+                            productsMenuTimer.current = setTimeout(() => {
+                                setIsProductsMenuOpen(false);
+                            }, 150);
+                        }}
                     >
-                        Sản phẩm
-                        <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-white transform transition-transform duration-300 ${pathname === "/products" ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                            }`}></span>
-                    </Link>
+                        <Link
+                            href="/products"
+                            className={`relative text-white hover:text-purple-200 transition-all py-2 group flex items-center gap-1 ${pathname === "/products" || pathname?.startsWith("/products/") ? "font-semibold" : ""
+                                }`}
+                        >
+                            Sản phẩm
+                            <ChevronDown className={`w-4 h-4 transition-transform ${isProductsMenuOpen ? 'rotate-180' : ''}`} />
+                            <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-white transform transition-transform duration-300 ${pathname === "/products" || pathname?.startsWith("/products/") ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                                }`}></span>
+                        </Link>
+
+                        {/* Categories Dropdown */}
+                        {isProductsMenuOpen && categories.length > 0 && (
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[900px]">
+                                <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 rounded-xl shadow-2xl overflow-hidden backdrop-blur-sm">
+                                    <div className="p-6">
+                                        {/* Header with All Products Button */}
+                                        <div className="mb-6">
+                                            <Link
+                                                href="/products"
+                                                className="block px-6 py-4 text-white font-bold bg-gradient-to-r from-purple-600 via-purple-500 to-blue-600 hover:from-purple-700 hover:via-purple-600 hover:to-blue-700 rounded-xl transition-all text-center shadow-lg hover:shadow-purple-500/50 hover:scale-[1.02] group"
+                                            >
+                                                <span className="flex items-center justify-center gap-2">
+                                                    <span className="text-2xl group-hover:rotate-12 transition-transform">🛒</span>
+                                                    <span>Xem tất cả sản phẩm</span>
+                                                </span>
+                                            </Link>
+                                        </div>
+
+                                        {/* Categories Grid */}
+                                        <div className="mb-3">
+                                            <h3 className="text-gray-400 text-sm font-semibold uppercase tracking-wider mb-3 px-2">
+                                                Danh mục sản phẩm
+                                            </h3>
+                                            <div className="grid grid-cols-4 gap-4">
+                                                {categories.map((category) => (
+                                                    <Link
+                                                        key={category.id}
+                                                        href={`/products?category=${category.slug}`}
+                                                        className="relative flex flex-col items-center justify-center p-5 bg-slate-800/50 hover:bg-gradient-to-br hover:from-purple-600/20 hover:to-blue-600/20 rounded-xl transition-all duration-300 group border border-slate-700/50 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/10 overflow-hidden"
+                                                    >
+                                                        {/* Background glow effect */}
+                                                        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-blue-600/0 group-hover:from-purple-600/5 group-hover:to-blue-600/5 transition-all duration-300"></div>
+
+                                                        {/* Category Name */}
+                                                        <span className="relative z-10 text-sm text-center font-semibold text-gray-300 group-hover:text-white transition-colors duration-300">
+                                                            {category.name}
+                                                        </span>
+
+                                                        {/* Shine effect */}
+                                                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                     <Link
                         href="/news"
                         className={`relative text-white hover:text-purple-200 transition-all py-2 group ${pathname === "/news" || pathname?.startsWith("/news/") ? "font-semibold" : ""
@@ -554,45 +645,64 @@ export default function Navbar() {
                         <Link
                             href="/"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
-                                pathname === "/" ? "bg-purple-600" : "hover:bg-slate-800"
-                            }`}
+                            className={`block px-4 py-3 rounded-lg text-white transition-all ${pathname === "/" ? "bg-purple-600" : "hover:bg-slate-800"
+                                }`}
                         >
                             Trang chủ
                         </Link>
-                        <Link
-                            href="/products"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
-                                pathname === "/products" ? "bg-purple-600" : "hover:bg-slate-800"
-                            }`}
-                        >
-                            Sản phẩm
-                        </Link>
+                        {/* Products with Categories */}
+                        <div>
+                            <Link
+                                href="/products"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className={`block px-4 py-3 rounded-lg text-white font-semibold transition-all ${pathname === "/products" ? "bg-purple-600" : "hover:bg-slate-800"
+                                    }`}
+                            >
+                                🛒 Tất cả sản phẩm
+                            </Link>
+
+                            {/* Categories */}
+                            {categories.length > 0 && (
+                                <div className="mt-2 ml-4 space-y-1">
+                                    <p className="px-4 py-2 text-xs text-gray-500 font-semibold uppercase tracking-wider">
+                                        Danh mục
+                                    </p>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {categories.map((category) => (
+                                            <Link
+                                                key={category.id}
+                                                href={`/products?category=${category.slug}`}
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                                className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-300 hover:bg-slate-800 hover:text-white transition-all text-sm"
+                                            >
+                                                <span className="truncate">{category.name}</span>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                         <Link
                             href="/news"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
-                                pathname === "/news" || pathname?.startsWith("/news/") ? "bg-purple-600" : "hover:bg-slate-800"
-                            }`}
+                            className={`block px-4 py-3 rounded-lg text-white transition-all ${pathname === "/news" || pathname?.startsWith("/news/") ? "bg-purple-600" : "hover:bg-slate-800"
+                                }`}
                         >
                             Tin tức
                         </Link>
                         <Link
                             href="/about"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
-                                pathname === "/about" ? "bg-purple-600" : "hover:bg-slate-800"
-                            }`}
+                            className={`block px-4 py-3 rounded-lg text-white transition-all ${pathname === "/about" ? "bg-purple-600" : "hover:bg-slate-800"
+                                }`}
                         >
                             Giới thiệu
                         </Link>
                         <Link
                             href="/contact"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className={`block px-4 py-3 rounded-lg text-white transition-all ${
-                                pathname === "/contact" ? "bg-purple-600" : "hover:bg-slate-800"
-                            }`}
+                            className={`block px-4 py-3 rounded-lg text-white transition-all ${pathname === "/contact" ? "bg-purple-600" : "hover:bg-slate-800"
+                                }`}
                         >
                             Liên hệ thiết kế website
                         </Link>

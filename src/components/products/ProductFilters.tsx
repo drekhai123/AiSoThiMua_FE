@@ -95,48 +95,6 @@ const ProductFilters = ({
 
         <div className="h-px bg-slate-700" />
 
-        {/* Category Filter */}
-        <div>
-          <button
-            onClick={() => setShowCategories(!showCategories)}
-            className="flex items-center justify-between w-full text-white font-semibold mb-3 hover:text-purple-400 transition-colors"
-          >
-            <span>Danh mục</span>
-            {showCategories ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
-          {showCategories && (
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => handleCategoryChange("all")}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selectedCategory === "all"
-                  ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg shadow-purple-500/30"
-                  : "bg-slate-700/50 text-gray-300 border-slate-600 hover:border-purple-500 hover:bg-slate-700"
-                  }`}
-              >
-                Tất cả
-              </button>
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => handleCategoryChange(category)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selectedCategory === category
-                    ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-lg shadow-purple-500/30"
-                    : "bg-slate-700/50 text-gray-300 border-slate-600 hover:border-purple-500 hover:bg-slate-700"
-                    }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="h-px bg-slate-700" />
-
         {/* Tech Logo Filter */}
         <div>
           <button

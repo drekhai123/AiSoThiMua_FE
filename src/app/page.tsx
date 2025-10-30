@@ -1,6 +1,6 @@
 import Hero from "@/components/home/Hero";
 import Stats from "@/components/home/Stats";
-import Features from "@/components/home/Features";
+// import Features from "@/components/home/Features";
 import WalletPromo from "@/components/home/WalletPromo";
 import PromoBanner from "@/components/home/PromoBanner";
 import HowItWorks from "@/components/home/HowItWorks";
@@ -20,8 +20,11 @@ export default function Home() {
       {/* Stats Section - Trust Building */}
       <Stats />
 
+      {/* Spacer */}
+      <div className="h-16 md:h-10"></div>
+
       {/* Features Section */}
-      <Features />
+      {/* <Features /> */}
 
       {/* Wallet Promo - Giới thiệu hệ thống Cá */}
       <WalletPromo />

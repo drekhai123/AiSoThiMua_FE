@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const WalletPromo = () => {
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-24 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20"></div>
 
